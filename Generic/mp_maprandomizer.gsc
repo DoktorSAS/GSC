@@ -3,6 +3,7 @@
 
 /*
     Mod: Map Randomizer
+    Clints Supported: T4, T5, T6, IW3, IW5, IW5
     Deveoped by @DoktorSAS
 */
 
