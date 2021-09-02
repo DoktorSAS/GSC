@@ -3,8 +3,8 @@
 #include maps\mp\gametypes\_hud_util;
 
 /*
-  Mod: Faster Movements
-  Developed by oktorSAS
+    Mod: Faster Movements
+    Developed by oktorSAS
 */
 init()
 {
