@@ -1,0 +1,37 @@
+#include common_scripts\utility;
+#include maps\mp\_utility;
+#include maps\mp\gametypes\_hud_util;
+
+/*
+  Mod: Faster Movements
+  Developed by oktorSAS
+*/
+init()
+{
+    if(getDvarInt("sv_enablefastermovements") != 1)
+        return;
+    // Bunny-Hop
+    setDvar("jump_autobunnyhop", 1);
+
+    // Bounces
+    setDvar("sv_enablebounces", 1);
+
+    // How big a step is, it make the player tp to the nearest edge
+    setDvar("jump_stepsize", 256);
+
+    // idk for real
+    setDvar("jump_spreadadd", 64 );
+
+    // How much powerfull a jump is
+    setDvar("jump_height", 45);
+
+    // Enable/Disable jump slowdown
+    setDvar("jump_slowdownenable", 0);
+
+    // Enable/Disable fall damages
+    setDvar("jump_disabledfalldamage", 1);
+
+    // Players movement speed
+    setDvar("g_speed", 235 );
+    
+}
