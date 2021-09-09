@@ -20,7 +20,7 @@ init()
        case "IW3":
             _setDvarIfNotUnizialized("sv_gm_gametype", "dm");
             gametype = getDvar("sv_gm_gametype");
-            setDvar("sv_maprotation", "gametype " + gametype + " map " + maps[ randomintrange(0, maps.size-1) ] );
+            setDvar("sv_maprotationcurrent", "gametype " + gametype + " map " + maps[ randomintrange(0, maps.size-1) ] );
         break;
         case "IW4":
             if(getDvar("sv_gm_cfg") != "")
@@ -36,7 +36,7 @@ init()
         case "T4":
             _setDvarIfNotUnizialized("sv_gm_gametype", "tdm");
             gametype = getDvar("sv_gm_gametype");
-            setDvar("sv_maprotation", "gametype " + gametype + " map " + maps[ randomintrange(0, maps.size-1) ] );
+            setDvar("sv_maprotationcurrent", "gametype " + gametype + " map " + maps[ randomintrange(0, maps.size-1) ] );
         break;
         case "T5":
             setDvar("sv_maprotation", "map " + maps[ randomintrange(0, maps.size-1) ] );
