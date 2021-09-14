@@ -76,3 +76,17 @@ ZC_WaitZombiesRespawn()
         wait 0.05;
     }
 }
+affectElement(type, time, value){
+    if(type == "x" || type == "y")
+        self moveOverTime(time);
+    else
+        self fadeOverTime(time);
+    if(type == "x")
+        self.x = value;
+    if(type == "y")
+        self.y = value;
+    if(type == "alpha")
+        self.alpha = value;
+    if(type == "color")
+        self.color = value;
+}
