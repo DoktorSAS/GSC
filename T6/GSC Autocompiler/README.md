@@ -1,4 +1,4 @@
-# GSC Fastcompiler
+# GSC Autocompiler
 
 The auto compiler gsc is nothing but a simple [powershell](https://docs.microsoft.com/en-us/powershell/scripting/overview?view=powershell-7.1) script that allows you to compile a mod for Black ops II (Plutonium and Redacted).
 The script uses three directories:
