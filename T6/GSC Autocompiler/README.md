@@ -20,3 +20,11 @@ When the code is executed several windows may be generated that will define a su
 |![projecterror](https://github.com/DoktorSAS/GSC/blob/main/T6/GSC%20Autocompiler/assets/projecterror.png)|The source code of the project has an error, the compiler will report in the form of an error the line where the error is located while the windows notification will confirm the failure of the compilation.|
 |![compliedsuccess](https://github.com/DoktorSAS/GSC/blob/main/T6/GSC%20Autocompiler/assets/compiledsuccess.png)|The source code has been compiled correctly.|
 |![unknownissue](https://github.com/DoktorSAS/GSC/blob/main/T6/GSC%20Autocompiler/assets/unknownerror.png)|Unrecognized error, possible problem of any other type. (In case of this report the problem so that we can create a more complete script in catching errors).|
+
+# Download
+To download just press [here](https://github.com/DoktorSAS/GSC/blob/main/T6/GSC%20Autocompiler/GSC%20Autocompiler%20by%20DoktorSAS%20v1.0.0.rar?raw=true) or on the .rar file on this github page.
+
+
+
+
+
