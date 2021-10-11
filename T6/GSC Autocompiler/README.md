@@ -6,6 +6,7 @@ The script uses three directories:
 2. 'bin': Folder where the compiled script is placed
 3. 'compiler': Folder where the compiler for the gsc scripts is kept
 
+It is also possible to convert the powershell into an .exe. I created one based on the original script (if you don't trust my .exe you can recompile it by yourself).
 
 ### The Compiler folder
 The gsc compiler is the compiler provided by the Plutonium team. In fact, it will not be provided by default due to security.
