@@ -10,9 +10,11 @@ It is also possible to convert the powershell into an .exe. I created one based 
 
 The script in textual environments such as [Visual Studio Code](https://code.visualstudio.com/), [Notepad](https://notepad-plus-plus.org/downloads/), [Atom](https://atom.io/), etc. ... is very convenient to have the scripts divided into smaller portions of code and easily explorable.
 
+If you have difficulty following the written guide I also leave you a guide in the form of a step-by-step video.
+Press [here](https://www.youtube.com/watch?v=Wz0jEqxC0U8) for the video
+
 ### The Compiler folder
 The gsc compiler is the compiler provided by the Plutonium team. In fact, it will not be provided by default due to security.
-
 
 ### Notification
 When the code is executed several windows may be generated that will define a success, an error or a problem.
