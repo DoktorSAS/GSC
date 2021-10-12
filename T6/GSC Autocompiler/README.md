@@ -25,8 +25,7 @@ When the code is executed several windows may be generated that will define a su
 |![unknownissue](https://github.com/DoktorSAS/GSC/blob/main/T6/GSC%20Autocompiler/assets/unknownerror.png)|Unrecognized error, possible problem of any other type. (In case of this report the problem so that we can create a more complete script in catching errors).|
 
 # Download
-To download just press [here](https://github.com/DoktorSAS/GSC/blob/main/T6/GSC%20Autocompiler/GSC%20Autocompiler%20by%20DoktorSAS%20v1.0.0.rar?raw=true) or on the .rar file on this github page.
-
+To download just press [here](https://github.com/DoktorSAS/GSC/blob/main/T6/GSC%20Autocompiler/GSC%20Autocompiler%20by%20DoktorSAS.rar?raw=true) or on the .rar file on this github page.
 
 
 
