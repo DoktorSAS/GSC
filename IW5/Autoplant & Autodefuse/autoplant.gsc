@@ -34,7 +34,7 @@ init()
     level thread onPlayerConnected();   
     level thread doAutoplant();  
 
-    if(getDvarInt("sd_allowattackersrevive") == 0)
+    if(getDvarInt("sd_allowattackersrevive") == 0 && (getDvar("g_gametype") == "sd"))
         level thread defuseWhenAttakcersDies();
 
 }
