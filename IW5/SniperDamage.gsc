@@ -40,9 +40,6 @@ CodeCallback_PlayerDamage(eInflictor, eAttacker, iDamage, iDFlags, sMeansOfDeath
     {
         if( isSniper( sWeapon ) )
         {
-            if(level.antiBulletSprays && eAttacker.__vars["already_fired"])
-                iDamage = 0;
-            else 
                 iDamage = 999;  
         }
         else 
