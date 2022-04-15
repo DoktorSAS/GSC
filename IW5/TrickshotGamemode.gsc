@@ -17,7 +17,7 @@ main()
     level.allowPrintDamage = 0;
 
     level.__vars = [];
-	  level thread onPlayerConnect();
+    level thread onPlayerConnect();
     level.__vars["prematch_over"] = 0;
     level waittill("prematch_over");
     level thread trickshot_MoabOnEndGame();
