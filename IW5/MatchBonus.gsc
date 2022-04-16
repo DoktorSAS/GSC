@@ -2,7 +2,7 @@
 #include common_scripts\utility;
 
 /*
-    Fix Matchbonus
+    Mod: Fix Matchbonus
     Developed by DoktorSAS
 */
 
@@ -107,17 +107,17 @@ updatePlayerMatchBonus()
     {
         if (level.winningTeam != "tie")
         {
-            winnerScale = int(maps\mp\gametypes\_rank::getScoreInfoValue("win"));
-            loserScale = int(maps\mp\gametypes\_rank::getScoreInfoValue("loss"));
+            winnerScale = maps\mp\gametypes\_rank::getScoreInfoValue("win");
+            loserScale = maps\mp\gametypes\_rank::getScoreInfoValue("loss");
             setWinningTeam(level.winningTeam);
         }
         else
         {
-            winnerScale = int(maps\mp\gametypes\_rank::getScoreInfoValue("tie"));
-            loserScale = int(maps\mp\gametypes\_rank::getScoreInfoValue("tie"));
+            winnerScale = maps\mp\gametypes\_rank::getScoreInfoValue("tie");
+            loserScale = maps\mp\gametypes\_rank::getScoreInfoValue("tie");
         }
 
-        spm = int(self maps\mp\gametypes\_rank::getSPM());
+        spm = self maps\mp\gametypes\_rank::getSPM();
         if (level.winningTeam == "tie")
         {
             playerScore = int((winnerScale * ((gameLength / 60) * spm)) * (self.timePlayed["total"] / gameLength));
