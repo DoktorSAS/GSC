@@ -94,14 +94,14 @@ onPlayerConnected()
     for (;;)
     {
         level waittill("connected", player);
-        player thread updateMatchBonus();
+        player thread updatePlayerMatchBonus();
     }
 }
 
 updatePlayerMatchBonus()
 {
     level waittill("game_ended");
-    gameLength = float(getDvarFloat("scr_sd_timelimit") * 60);
+    gameLength = float(getDvarFloat("scr_"+getDvar("g_gametype")+"_timelimit") * 60);
 
     if (level.teamBased)
     {
@@ -155,16 +155,5 @@ updatePlayerMatchBonus()
             playerScore = int((1 * ((gameLength / 60) * spm)) * (self.timePlayed["total"] / gameLength));
             self.matchBonus = playerScore;
         }
-    }
-}
-updateMatchBonus()
-{
-    self endon("death");
-    self endon("disconnect");
-    level endon("game_ended");
-    for (;;)
-    {
-        self thread updatePlayerMatchBonus();
-        wait 0.05;
     }
 }
