@@ -18,14 +18,14 @@ init()
 isSniper( weapon )
 {
     return ( 
-        isSubstr( weapon, "iw5_dragunov_mp") 
-        ||  isSubstr( weapon, "iw5_msr_mp" ) 
-        ||  isSubstr( weapon, "iw5_barrett_mp" ) 
-        ||  isSubstr( weapon, "iw5_barrett_mp" ) 
-        ||  isSubstr( weapon, "iw5_rsass_mp" ) 
-        ||  isSubstr( weapon, "iw5_as50_mp" ) 
-        ||  isSubstr( weapon, "iw5_l96a1_mp")
-        ||  isSubstr( weapon, "iw5_cheytac_mp")
+        isSubstr( weapon, "iw5_dragunov") 
+        ||  isSubstr( weapon, "iw5_msr" ) 
+        ||  isSubstr( weapon, "iw5_barrett" ) 
+        ||  isSubstr( weapon, "iw5_barrett" ) 
+        ||  isSubstr( weapon, "iw5_rsass" ) 
+        ||  isSubstr( weapon, "iw5_as50" ) 
+        ||  isSubstr( weapon, "iw5_l96a1")
+        ||  isSubstr( weapon, "iw5_cheytac")
     );
 }
 
