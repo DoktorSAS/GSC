@@ -94,8 +94,17 @@ onPlayerConnected()
     for (;;)
     {
         level waittill("connected", player);
-        player thread updatePlayerMatchBonus();
+        if(!player is_bot())
+            player thread updatePlayerMatchBonus();
     }
+}
+
+is_bot()
+{
+	assert( isDefined( self ) );
+	assert( isPlayer( self ) );
+
+	return ( ( isDefined( self.pers["isBot"] ) && self.pers["isBot"] ) || ( isDefined( self.pers["isBotWarfare"] ) && self.pers["isBotWarfare"] ) || isSubStr( self getguid() + "", "bot" ) );
 }
 
 updatePlayerMatchBonus()
