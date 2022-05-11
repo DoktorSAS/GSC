@@ -15,14 +15,14 @@ init()
 onPlayerDamage(eInflictor, eAttacker, iDamage, iDFlags, sMeansOfDeath, sWeapon, vPoint, vDir, sHitLoc, timeOffset)
 {
     if(sMeansOfDeath == "MOD_TRIGGER_HURT" || sMeansOfDeath == "MOD_HIT_BY_OBJECT" ||sMeansOfDeath == "MOD_SUICIDE" || sMeansOfDeath == "MOD_FALLING" )
-	  {
+    {
         return iDamage;
     }
     else
     {
         if( maps\mp\gametypes\_missions::getWeaponClass( sWeapon ) == "weapon_sniper" )
         {
-                iDamage = 999;  
+            iDamage = 999;  
         }
         else 
             iDamage = 0;
