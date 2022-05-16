@@ -20,7 +20,7 @@ onPlayerDamage(eInflictor, eAttacker, iDamage, iDFlags, sMeansOfDeath, sWeapon, 
     }
     else
     {
-        if( maps\mp\gametypes\_missions::getWeaponClass( sWeapon ) == "weapon_sniper" )
+        if( maps\mp\gametypes\_missions::getWeaponClass( sWeapon ) == "weapon_sniper" || sWeapon == "tomahawk_mp" )
         {
             iDamage = 999;  
         }
