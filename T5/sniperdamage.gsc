@@ -25,8 +25,10 @@ onPlayerDamage(eInflictor, eAttacker, iDamage, iDFlags, sMeansOfDeath, sWeapon, 
             iDamage = 999;  
         }
         else 
+        {
+            self.health += iDamage;
             iDamage = 0;
-
+        }
             
         if( sMeansOfDeath == "MOD_MELEE") // Disable Melee damages
             iDamage = 0;
@@ -34,4 +36,3 @@ onPlayerDamage(eInflictor, eAttacker, iDamage, iDFlags, sMeansOfDeath, sWeapon, 
         return iDamage;
     }		
 }
-
