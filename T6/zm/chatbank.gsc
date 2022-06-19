@@ -165,7 +165,6 @@ onPlayerSay()
                                             player.score -= int(args[1]);
                                             target.score += int(args[1]);
                                             player tell("Paid ^2$^7" + args[1] + " to " + targetname);
-                                            break;
                                         }
                                     }
                                 }
