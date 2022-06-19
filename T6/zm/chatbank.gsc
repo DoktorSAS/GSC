@@ -14,40 +14,46 @@ init()
     level thread onPlayerSay();
 }
 
-updateBankValue( value )
+onPlayerConnect()
 {
-    path = "bank/" + self getGuid() + ".txt";
-
-    // Overwrite the bank value
-    file = fopen( path, "w" );
-    fwrite(file, value + "");
-    fclose(file);
-
-}
-
-valueToString( value )
-{
-    str = "";
-    for(i = value.size-1; i >= 0; i--)
+    for (;;)
     {
-        str = str + value[ value.size-i-1 ];
-        if( i%3==0 && i > 2)
-            str = str + "'";
+        level waittill("connecting", player);
+        player thread setupBank();
     }
-    return str;
 }
 
-getDvarIntDefault(dvar, value)
+setupBank() // Initialize bank value
 {
-    if(dvar == "")
-        return value;
+    self endon("disconnect");
+    level endon("end_game");
+    
+    path = "bank/" + self getGuid() + ".txt";
+    if (!fileExists(path))
+    {
+        /*
+            Each player will have his or her own file containing the value of the bank
+            This system decreases the search for an O(1) time information. 
+            Direct access to information without use of any search algortim.
+        */
+        writeFile(path, "");
+        while(!fileExists(path)) wait 0.5;
+
+        // Set default bank value to 0
+        file = fopen(path, "a");
+        fwrite(file, "0");
+        fclose(file);
+        self.pers["bank"] = 0;  
+    }
     else
-        return getDvarInt(dvar);
+    {
+        self.pers["bank"] = int(readFile(path)); // Read value from the file
+    }
 }
+
 onPlayerSay()
 {
     level endon("end_game");
-
    
     prefix = ".";
     for (;;)
@@ -61,10 +67,7 @@ onPlayerSay()
             switch(command) {
                 case "deposit":
                 case "d":
-                    if( getDvarIntDefault("sv_allowchatbank", 1) == 0)
-                    {
-                       
-                    }
+                    if( getDvarIntDefault("sv_allowchatbank", 1) == 0){ }
                     else
                         if(isDefined(args[1]))
                         {
@@ -99,10 +102,7 @@ onPlayerSay()
             
                 case "withdraw":
                 case "w":
-                    if( getDvarIntDefault("sv_allowchatbank", 1) == 0 )
-                    {
-                        
-                    }
+                    if( getDvarIntDefault("sv_allowchatbank", 1) == 0 ){ }
                     else
                         if(isDefined(args[1]))
                         {
@@ -142,10 +142,7 @@ onPlayerSay()
                     break;
                 case "p":
                 case "pay":
-                    if( getDvarIntDefault("sv_allowchatpayments", 1) == 0 )
-                    {
-                        
-                    }
+                    if( getDvarIntDefault("sv_allowchatpayments", 1) == 0 ) { }
                     else
                         if(isDefined(args[1]))
                         {
@@ -187,43 +184,38 @@ onPlayerSay()
         }
     }
 }
-
-onPlayerConnect()
+updateBankValue( value ) // Update bank value into the file
 {
-    for (;;)
-    {
-        level waittill("connecting", player);
-        player thread setupBank();
-    }
-}
-
-setupBank()
-{
-    self endon("disconnect");
-    level endon("game_ended");
-    
     path = "bank/" + self getGuid() + ".txt";
-    if (!fileExists(path))
-    {
-        /*
-            Each player will have his or her own file containing the value of the bank
-            This system decreases the search for an O(1) time information. 
-            Direct access to information without use of any search algortim.
-        */
-        writeFile(path, "");
-        while(!fileExists(path)) wait 0.5;
-        file = fopen(path, "a");
-        fwrite(file, "0");
-        fclose(file);
-        self.pers["bank"] = 0;
-    }
-    else
-    {
-        self.pers["bank"] = readFile(path);
-    }
+
+    // Overwrite the bank value
+    file = fopen( path, "w" );
+    fwrite(file, value + "");
+    fclose(file);
+
 }
 
-isInteger( value )
+valueToString( value ) // Convert an integer to a better intger rappresentation, like 10025 to 10'025
+{
+    str = "";
+    for(i = value.size-1; i >= 0; i--)
+    {
+        str = str + value[ value.size-i-1 ];
+        if( i%3==0 && i > 2)
+            str = str + "'";
+    }
+    return str;
+}
+
+getDvarIntDefault(dvar, value)
+{
+    if(dvar == "")
+        return value;
+    else
+        return getDvarInt(dvar);
+}
+
+isInteger( value ) // Check if the value contains only numbers
 {
     for(i = 0; i < value.size; i++)
     {
