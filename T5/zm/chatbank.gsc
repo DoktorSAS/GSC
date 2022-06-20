@@ -221,19 +221,10 @@ getDvarIntDefault(dvar, value)
 
 isInteger( value ) // Check if the value contains only numbers
 {
-    for(i = 0; i < value.size; i++)
-    {
-        if(value[ i ] != "0"
-            && value[ i ] != "1"
-            && value[ i ] != "2"
-            && value[ i ] != "3"
-            && value[ i ] != "4"
-            && value[ i ] != "5"
-            && value[ i ] != "6"
-            && value[ i ] != "7"
-            && value[ i ] != "8"
-            && value[ i ] != "9")
-            return 0;
-    }
+    new_int = int(value);
+    
+    if (value != "0" && new_int == 0) // 0 means its invalid
+        return 0;
+    
     return 1;
 }
