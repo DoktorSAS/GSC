@@ -7,7 +7,7 @@
 
     Requirements:
         t6-gsc-utils.dll for Black ops II 
-       
+
     dedicated.cfg:
     Add to your server cfg file the dvar sv_allowchatpayments and
     the dvar sv_allowchatbank to enable payments and to enable the 
@@ -67,7 +67,7 @@ onPlayerSay()
     {
         level waittill("say", message, player);
         message = toLower(message);
-        if(!level.intermission && message[0] == ".")
+        if(!level.intermission && message[0] == prefix)
         {
             args = strtok(message, " ");
             command = getSubStr(args[0], 1);
@@ -145,7 +145,8 @@ onPlayerSay()
                 case "balance":
                 case "b":
                 case "money":
-                    player tell("Your balance is ^2$^7" + valueToString(player.pers["bank"]) );
+                    if( getDvarIntDefault("sv_allowchatbank", 1) == 1 && isDefined(player.pers["bank"]))
+                        player tell("Your balance is ^2$^7" + valueToString(player.pers["bank"]) );
                     break;
                 case "p":
                 case "pay":
@@ -204,10 +205,12 @@ updateBankValue( value ) // Update bank value into the file
 
 valueToString( value ) // Convert an integer to a better intger rappresentation, like 10025 to 10'025
 {
+    value = value + "";
     str = "";
     for(i = value.size-1; i >= 0; i--)
     {
-        str = str + value[ value.size-i-1 ];
+        index = value.size-i-1;
+        str = str + value[ index ];
         if( i%3==0 && i > 2)
             str = str + "'";
     }
