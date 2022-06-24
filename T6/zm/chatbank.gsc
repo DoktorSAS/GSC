@@ -7,6 +7,13 @@
 
     Requirements:
         t6-gsc-utils.dll for Black ops II 
+       
+    dedicated.cfg:
+    Add to your server cfg file the dvar sv_allowchatpayments and
+    the dvar sv_allowchatbank to enable payments and to enable the 
+    bank commands. Like
+        set sv_allowchatbank 1
+        set sv_allowchatpayments 1
 */
 init()
 {
