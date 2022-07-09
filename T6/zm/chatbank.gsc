@@ -115,9 +115,9 @@ onPlayerSay()
                         {
                             if(args[1] == "all")
                             {
-                                player.pers["bank"] = 0;
                                 player.score = player.score + player.pers["bank"];
                                 player updateBankValue( 0 );
+                                player.pers["bank"] = 0;
                                 player tell("^2$^7" + valueToString(player.pers["bank"]) + " withdrawn");
                             }
                             else
