@@ -167,9 +167,10 @@ onPlayerSay()
                                     {
                                         if(issubstr(player.name, target.name))
                                         {
-                                            player.score -= int(args[1]);
-                                            target.score += int(args[1]);
+                                            player.score = player.score - int(args[1]);
+                                            target.score = target.score + int(args[1]);
                                             player tell("Paid ^2$^7" + args[1] + " to " + targetname);
+                                            target tell("Recived ^2$^7" + args[1] + " from " + player.name);
                                         }
                                     }
                                 }
@@ -232,5 +233,8 @@ isInteger( value ) // Check if the value contains only numbers
     if (value != "0" && new_int == 0) // 0 means its invalid
         return 0;
     
-    return 1;
+    if(new_int > 0)
+        return 1;
+    else
+        return 0;
 }
