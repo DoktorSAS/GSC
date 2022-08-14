@@ -19,7 +19,7 @@
 */
 lockServer(round)
 {
-	if( round < 0 )
+	if (round < 0)
 	{
 		return;
 	}
@@ -39,37 +39,36 @@ lockServer(round)
 
 init()
 {
-	
 	setupFeatures();
 }
 
 setupFeatures()
-{	
-	setdvar("r_fog", GetDvarIntDefault("sv_nofog", 1));					   
-	setdvar("scr_screecher_ignore_player", GetDvarIntDefault("sv_nodenizen", 0)); 
+{
+	setdvar("r_fog", GetDvarIntDefault("sv_nofog", 1));
+	setdvar("scr_screecher_ignore_player", GetDvarIntDefault("sv_nodenizen", 0));
 
-	if( GetDvarIntDefault("sv_lockround", 0) > 0)
+	if (GetDvarIntDefault("sv_lockround", 0) > 0)
 	{
-		level thread lockServer( );
+		level thread lockServer();
 	}
-	
-	if( GetDvarIntDefault("sv_zombiescounter", 0) == 1 )
+
+	if (GetDvarIntDefault("sv_zombiescounter", 0) == 1)
 	{
-		level thread drawZombiesCounter( );
+		level thread drawZombiesCounter();
 	}
-	if( GetDvarIntDefault("sv_disableemp", 0) == 1 )
+	if (GetDvarIntDefault("sv_disableemp", 0) == 1)
 	{
 		level thread remove_emp();
 	}
-	if( GetDvarIntDefault("sv_disabletimebomb", 0) == 1 )
+	if (GetDvarIntDefault("sv_disabletimebomb", 0) == 1)
 	{
 		level thread remove_timebomb();
 	}
 }
 
-drawZombiesCounter( )
+drawZombiesCounter()
 {
-    zombiesCounter = createServerFontString("objective", 1.4);
+	zombiesCounter = createServerFontString("objective", 1.4);
 	zombiesCounter setPoint("BOTTOM RIGHT", "BOTTOM RIGHT", 0, 0, 0.5);
 	zombiesCounter.label = &"Zombies: ^1";
 	zombiesCounter.x = zombiesCounter.x - 50;
@@ -81,8 +80,8 @@ drawZombiesCounter( )
 	zombiesCounter setValue(0);
 	flag_wait("initial_blackscreen_passed");
 	oldZombiesCount = 0;
-    while(1)
-    {
+	while (1)
+	{
 		enemies = get_round_enemy_array().size + level.zombie_total;
 		if (enemies > 0)
 		{
@@ -109,8 +108,8 @@ drawZombiesCounter( )
 			zombiesCounter setValue(enemies);
 			zombiesCounter affectElement("alpha", 0.5, 1);
 		}
-        wait 0.5;
-    }
+		wait 0.5;
+	}
 }
 
 affectElement(type, time, value)
@@ -157,5 +156,4 @@ remove_timebomb()
 
 main()
 {
-	
 }
