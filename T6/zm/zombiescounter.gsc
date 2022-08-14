@@ -16,8 +16,8 @@ init()
 
 init_ZombiesCounter()
 {
-	zombiesCounter = createServerFontString("hudsmall", 1.4);
-	zombiesCounter setPoint("BOTTOM RIGHT", "BOTTOM RIGHT", "BOTTOM RIGHT", "BOTTOM RIGHT", 0.5);
+	zombiesCounter = createServerFontString("objective", 1.4);
+	zombiesCounter setPoint("BOTTOM RIGHT", "BOTTOM RIGHT", 0, 0, 0.5);
 	zombiesCounter.x = zombiesCounter.x - 50;
 	zombiesCounter.hideWhenInMenu = 1;
 	zombiesCounter.archived = 0;
