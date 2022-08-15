@@ -13,8 +13,6 @@
 
 init()
 {
-    _setDvarIfNotUnizialized("sv_enablebounces", 1);
-    level.isDepatcedBounceON = getDvarInt("sv_enablebounces");
     level thread onPlayerConnect();
 }
 
@@ -37,76 +35,29 @@ onRiotShield()
 {
     self endon("disconnect");
     level endon("game_ended");
-    self.riotshield = [];
-    self.riotshield["status"] = 0;
-    self.riotshield["type"] = level.isDepatcedBounceON;
     for (;;)
     {
         wait 0.05;
-        if (isDefined(self.riotshieldretrievetrigger) && isDefined(self.riotshieldentity) && !self.riotshield["status"])
+        if (getDvarIntDefault("sv_shieldbounces", 0) && isDefined(self.riotshieldretrievetrigger) && isDefined(self.riotshieldentity))
         {
-            self.riotshield["status"] = 1;
             self.canBounce = 1;
-            if (level.isDepatcedBounceON)
-                level thread DepeatchedBounce(self.origin + (0, 0, 50), 25, self getxuid());
-            else
-                level thread Bounce(self.origin + (0, 0, 50), 25, self getxuid());
+            level thread Bounce(self.origin + (0, 0, 50), 25, self getxuid());
         }
-        else if (!isDefined(self.riotshieldretrievetrigger) && !isDefined(self.riotshieldentity) && self.riotshield["status"])
+        else if (!isDefined(self.riotshieldretrievetrigger) && !isDefined(self.riotshieldentity))
         {
-            self.riotshield["status"] = false;
             level notify(self getxuid());
         }
     }
 }
-onPlayerDisconnect() // This function is to disable bounce when player disconnect (It should not be necessary)
+onPlayerDisconnect()
 {
     self waittill("disconnect");
-    if (self.riotshield["status"])
-        level notify(self getguid());
-}
-
-/*
-    When there No Depatched Bounce the velocity is differnet, thats why there 2 bounces functions
-    if something go wrong just change the number (INT) in the NegateBounceDepatched function
-*/
-DepeatchedBounce(bounceOrigin, range, guid)
-{
-    level endon("game_ended");
-    level endon(guid);
-    for (;;)
+    if (self.riotshieldretrievetrigger)
     {
-        foreach (player in level.players)
-        {
-            if (!player isOnGround())
-            {
-                player.vel = player GetVelocity();
-                if (player isInPosition(bounceOrigin, range) && player.vel[2] < 0 && !player isOnGround())
-                {
-                    player.newVel = (player.vel[0], player.vel[1], NegateBounce(player.vel[2]));
-                    player SetVelocity(player.newVel);
-                }
-            }
-        }
-        wait .01;
+        level notify(self getguid());
     }
 }
-playerDepatchedBounce()
-{
-    level endon("game_ended");
-    self.canBounce = false;
-    wait 1;
-    self.canBounce = 1;
-}
-NegateBounceDepatched(vector)
-{                                          // Credits go to CodJumper.
-    negative = vector - (vector * 80.125); // Change the number there if something go wrong
-    return (negative);
-}
-/*
-    When there Depatched Bounce the velocity is differnet, thats why there 2 bounces functions
-    if something go wrong just change the number (INT) in the NegateBounce function
-*/
+
 Bounce(bounceOrigin, range, guid)
 {
     level endon("game_ended");
@@ -131,7 +82,7 @@ Bounce(bounceOrigin, range, guid)
 playerBounce()
 {
     level endon("game_ended");
-    self.canBounce = false;
+    self.canBounce = 0;
     wait 1;
     self.canBounce = 1;
 }
@@ -146,5 +97,5 @@ isInPosition(sP, range)
 {
     if (distance(self.origin, sP) < range)
         return 1;
-    return false;
+    return 0;
 }
