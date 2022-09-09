@@ -74,125 +74,182 @@ onPlayerSay()
             switch(command) {
                 case "deposit":
                 case "d":
-                    if( getDvarIntDefault("sv_allowchatbank", 1) == 0){ }
-                    else
-                        if(isDefined(args[1]))
-                        {
-                            if(args[1] == "all")
-                            {
-                                player.pers["bank"] = player.pers["bank"] + player.score;
-                                player.score = 0;
-                                player updateBankValue(player.pers["bank"]);
-                                player tell("^2$^7" + valueToString(player.score) + " deposited");
-                            }
-                            else
-                            {
-                                if(isInteger(args[1]) && player.score >= int(args[1]))
-                                {
-                                    player.pers["bank"] = int(player.pers["bank"]) + int(args[1]);
-                                    player.score = player.score - int(args[1]);
-                                    player updateBankValue(player.pers["bank"]);
-                                    player tell("^2$^7" + valueToString(args[1]) + " deposited");
-                                }
-                                else
-                                {
-                                    player tell("Invalid ammount");
-                                }
-                            }
-                        }
-                        else
-                        {
-                            player tell("Missing ammount");
-                        }
-
+                    doDeposit(player, args);
                     break;
-            
+
                 case "withdraw":
                 case "w":
-                    if( getDvarIntDefault("sv_allowchatbank", 1) == 0 ){ }
-                    else
-                        if(isDefined(args[1]))
-                        {
-                            if(args[1] == "all")
-                            {
-                                player.score = player.score + player.pers["bank"];
-                                player updateBankValue( 0 );
-                                player.pers["bank"] = 0;
-                                player tell("^2$^7" + valueToString(player.pers["bank"]) + " withdrawn");
-                            }
-                            else
-                            {
-                                if(isInteger(args[1]) && player.pers["bank"] >= int(args[1]))
-                                {
-                                    player.pers["bank"] = int(player.pers["bank"]) - int(args[1]);
-                                    player.score = player.score + int(args[1]);
-                                    player updateBankValue( player.pers["bank"] );
-                                    player tell("^2$^7" + valueToString(args[1]) + " withdrawn");
-                                }
-                                else
-                                {
-                                    player tell("Invalid ammount");
-                                }
-                            }
-                        }
-                        else
-                        {
-                            player tell("Missing ammount");
-                        }
-
+                    doWhitdraw(player, args);
                     break;
             
                 case "balance":
                 case "b":
                 case "money":
-                    if( getDvarIntDefault("sv_allowchatbank", 1) == 1 && isDefined(player.pers["bank"]))
-                        player tell("Your balance is ^2$^7" + valueToString(player.pers["bank"]) );
+                    if (getDvarIntDefault("sv_allowchatbank", 1) == 1 && isDefined(player.pers["bank"]))
+                    {
+                        player tell("Your balance is ^2$^7" + valueToString(player.pers["bank"]));
+                    }
                     break;
                 case "p":
                 case "pay":
-                    if( getDvarIntDefault("sv_allowchatpayments", 1) == 0 ) { }
-                    else
-                        if(isDefined(args[1]))
-                        {
-                            if(isDefined(args[2]))
-                            {
-                                if(isInteger(args[1]))
-                                {
-                                    targetname = args[2];
-                                    for(i = 3; i < args.size;i++)
-                                    {
-                                        targetname = targetname + " " + args[i];
-                                    }
-                                    foreach(target in level.players) 
-                                    {
-                                        if(issubstr(player.name, target.name))
-                                        {
-                                            player.score = player.score - int(args[1]);
-                                            target.score = target.score + int(args[1]);
-                                            player tell("Paid ^2$^7" + args[1] + " to " + targetname);
-                                            target tell("Recived ^2$^7" + args[1] + " from " + player.name);
-                                        }
-                                    }
-                                }
-                                else
-                                {
-                                    player tell("Invalid ammount");
-                                }
-                            }
-                            else
-                            {
-                                player tell("Missing player name");
-                            }
-                        }
-                        else
-                        {
-                            player tell("Missing ammount");
-                        }
+                    doPay(player, args);
                 break;
             }
         }
     }
 }
+
+doWhitdraw(player, args)
+{
+    if (getDvarIntDefault("sv_allowchatbank", 1) == 0)
+    {
+    }
+    else if ((isDefined(player.whos_who_effects_active) && player.whos_who_effects_active) || player.fake_death)
+    {
+        player tell("Command disable during last stand with WhosWho perk");
+    }
+    else
+    {
+        if (isDefined(args[1]))
+        {
+            if (args[1] == "all")
+            {
+                player.score = player.score + player.pers["bank"];
+                player tell("^2$^7" + valueToString(player.pers["bank"]) + " withdrawn");
+                player.pers["bank"] = 0;
+                player updateBankValue(0);
+            }
+            else
+            {
+                if (isInteger(args[1]) && player.pers["bank"] >= int(args[1]))
+                {
+                    player.score = player.score + int(args[1]);
+                    player.pers["bank"] = int(player.pers["bank"]) - int(args[1]);
+                    player updateBankValue(player.pers["bank"]);
+                    player tell("^2$^7" + valueToString(args[1]) + " withdrawn");
+                }
+                else
+                {
+                    player tell("Invalid ammount");
+                }
+            }
+        }
+        else
+        {
+            player tell("Missing ammount");
+        }
+    }
+}
+doDeposit(player, args)
+{
+    if (getDvarIntDefault("sv_allowchatbank", 1) == 0)
+    {
+    }
+    else
+    {
+        if (isDefined(args[1]))
+        {
+            if (args[1] == "all")
+            {
+                player.pers["bank"] = player.pers["bank"] + player.score;
+                player.score = 0;
+                player updateBankValue(player.pers["bank"]);
+                player tell("^2$^7" + valueToString(player.score) + " deposited");
+
+                if (checkRankup(player))
+                    player tell("You have enough money to ^3level ^7up, write in chat ^5.rankup ^7to ^3level ^7up");
+            }
+            else
+            {
+                if (isInteger(args[1]) && player.score >= int(args[1]))
+                {
+                    player.pers["bank"] = int(player.pers["bank"]) + int(args[1]);
+                    player.score = player.score - int(args[1]);
+                    player updateBankValue(player.pers["bank"]);
+                    player tell("^2$^7" + valueToString(args[1]) + " deposited");
+                }
+                else
+                {
+                    player tell("Invalid ammount");
+                }
+            }
+        }
+        else
+        {
+            player tell("Missing ammount");
+        }
+    }
+}
+doPay(player, args)
+{
+    if (getDvarIntDefault("sv_allowchatpayments", 1) == 0)
+    {
+    }
+    else if ((isDefined(player.whos_who_effects_active) && player.whos_who_effects_active) || player.fake_death) // Prevent money dupe
+    {
+        player tell("Command disable during last stand with WhosWho perk");
+    }
+    else
+    {
+        if (isDefined(args[1]))
+        {
+            if (isDefined(args[2]))
+            {
+                if (isInteger(args[1]))
+                {
+                    money = int(args[1]);
+                    if (player.score >= money)
+                    {
+                        targetname = args[2];
+                        for (i = 3; i < args.size; i++)
+                        {
+                            targetname = targetname + " " + args[i];
+                        }
+                        foundTarget = player;
+                        foreach (target in level.players)
+                        {
+                            if (issubstr(target.name, targetname) && foundTarget != player)
+                            {
+                                foundTarget = target;
+                            }
+                        }
+                        if (foundTarget != player)
+                        {
+                            player.score = player.score - money;
+                            player tell("Paid ^2$^7" + args[1] + " to " + targetname);
+                            wait 0.5;
+                            foundTarget.score = foundTarget.score + money;
+                            wait 0.5;
+                            foundTarget tell("Received ^2$^7" + args[1] + " from " + player.name);
+                        }
+                        else
+                        {
+                            wait 0.2;
+                            foundTarget tell("You ^1can't ^7pay yourself");
+                        }
+                    }
+                    else
+                    {
+                        player tell("Invalid ammount");
+                    }
+                }
+                else
+                {
+                    player tell("Invalid ammount");
+                }
+            }
+            else
+            {
+                player tell("Missing player name");
+            }
+        }
+        else
+        {
+            player tell("Missing ammount");
+        }
+    }
+}
+
 updateBankValue( value ) // Update bank value into the file
 {
     path = "bank/" + self getGuid() + ".txt";
@@ -201,22 +258,26 @@ updateBankValue( value ) // Update bank value into the file
     file = fopen( path, "w" );
     fwrite(file, value + "");
     fclose(file);
-
 }
 
-valueToString( value ) // Convert an integer to a better intger rappresentation, like 10025 to 10'025
+valueToString(value) // Convert an integer to a better intger rappresentation, like 10025 to 10'025
 {
-    value = value + "";
+    return value;
+    // The conversion generate issue
+    /*value = value + "";
     str = "";
-    for(i = value.size-1; i >= 0; i--)
+    for (i = value.size - 1; i >= 0; i--)
     {
-        index = value.size-i-1;
-        str = str + value[ index ];
-        if( i%3==0 && i > 2)
-            str = str + "'";
+        index = value.size - i - 1;
+        str = str + value[index];
+        if (i % 3 == 0 && i > 2)
+        {
+             str = str + "'";
+        }
     }
-    return str;
+    return str;*/
 }
+
 
 getDvarIntDefault(dvar, value)
 {
