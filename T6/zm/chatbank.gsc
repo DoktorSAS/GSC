@@ -282,9 +282,9 @@ valueToString(value) // Convert an integer to a better intger rappresentation, l
 getDvarIntDefault(dvar, value)
 {
     if(dvar == "")
-        return value;
-    else
         return getDvarInt(dvar);
+    else
+        return value;
 }
 
 isInteger( value ) // Check if the value contains only numbers
