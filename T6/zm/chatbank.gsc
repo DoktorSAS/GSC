@@ -156,8 +156,6 @@ doDeposit(player, args)
                 player updateBankValue(player.pers["bank"]);
                 player tell("^2$^7" + valueToString(player.score) + " deposited");
 
-                if (checkRankup(player))
-                    player tell("You have enough money to ^3level ^7up, write in chat ^5.rankup ^7to ^3level ^7up");
             }
             else
             {
