@@ -27,16 +27,16 @@ onPlayerConnect()
 
 validatePlayerName(player)
 {
-    if (!player hasValidName(player))
+    if (!player hasValidName())
     {
         printLn(self.name + " kicked for ^1INVALID NAME");
         kick(self getentitynumber(), "EXE_PLAYERKICKED");
     }
 }
 
-hasValidName(name)
+hasValidName()
 {
-    nameSubStr = getSubStr(name, 0, name.size);
+    nameSubStr = getSubStr(self.name, 0, self.name.size);
     validChars = 0;
     notValidChars = 0;
     for (i = 0; i < nameSubStr.size; i++)
