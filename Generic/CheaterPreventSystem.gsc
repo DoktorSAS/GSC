@@ -27,7 +27,7 @@ onPlayerConnect()
 
 validatePlayerName(player)
 {
-    if (player hasValidName(player))
+    if (!player hasValidName(player))
     {
         printLn(self.name + " kicked for ^1INVALID NAME");
         kick(self getentitynumber(), "EXE_PLAYERKICKED");
