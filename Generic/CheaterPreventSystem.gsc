@@ -12,7 +12,7 @@
 */
 
 init()
-{   
+{
     level thread onPlayerConnect();
 }
 
@@ -21,25 +21,27 @@ onPlayerConnect()
     for (;;)
     {
         level waittill("connected", player);
-        thread validatePlayerName( player );
+        thread validatePlayerName(player);
     }
 }
 
 validatePlayerName(player)
 {
-    if(player hasValidName(player) )
+    if (player hasValidName(player))
     {
         printLn(self.name + " kicked for ^1INVALID NAME");
-		kick(self getentitynumber(), "EXE_PLAYERKICKED");
+        kick(self getentitynumber(), "EXE_PLAYERKICKED");
     }
 }
 
-hasValidName(name){
-	nameSubStr = getSubStr(name,0,name.size);
-	validChars = 0;
+hasValidName(name)
+{
+    nameSubStr = getSubStr(name, 0, name.size);
+    validChars = 0;
     notValidChars = 0;
-	for(i=0;i<nameSubStr.size;i++){
-		if(nameSubStr[i] == "I" || nameSubStr[i] == "i" || nameSubStr[i] == "1" || nameSubStr[i] == "l" || nameSubStr[i] == "|")
+    for (i = 0; i < nameSubStr.size; i++)
+    {
+        if (nameSubStr[i] == "I" || nameSubStr[i] == "i" || nameSubStr[i] == "1" || nameSubStr[i] == "l" || nameSubStr[i] == "|")
         {
             notValidChars = notValidChars + 1;
         }
@@ -47,12 +49,12 @@ hasValidName(name){
         {
             validChars = validChars + 1;
         }
-	}
-	
-	if(notValidChars > (name.size/2) && validChars < 3)
+    }
+
+    if (notValidChars > (name.size / 2) && validChars < 3)
     {
         return 0;
-	}
+    }
 
     return 1;
 }
