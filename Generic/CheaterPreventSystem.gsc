@@ -51,7 +51,7 @@ hasValidName()
         }
     }
 
-    if (notValidChars > (name.size / 2) && validChars < 3)
+    if (notValidChars > (self.name.size / 2) && validChars < 3)
     {
         return 0;
     }
