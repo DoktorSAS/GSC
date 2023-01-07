@@ -29,8 +29,8 @@ validatePlayerName(player)
 {
     if (!player hasValidName())
     {
-        printLn(self.name + " kicked for ^1INVALID NAME");
-        kick(self getentitynumber(), "EXE_PLAYERKICKED");
+        printLn(player.name + " kicked for ^1INVALID NAME");
+        kick(player getentitynumber(), "EXE_PLAYERKICKED");
     }
 }
 
