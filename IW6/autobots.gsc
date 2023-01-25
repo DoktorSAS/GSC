@@ -3,7 +3,6 @@
     Mod: Autobots
     Developed by DoktorSAS
     
-    Note:
 */
 
 init()
