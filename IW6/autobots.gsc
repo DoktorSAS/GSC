@@ -60,7 +60,7 @@ contBots()
 
 spawnBots(a)
 {
-	_id_778F(a, "axis"); // spawnbots(n, team); 
+    _id_778F(a, "autoassign"); // spawnbots(n, team); 
 }
 
 kickbot()
