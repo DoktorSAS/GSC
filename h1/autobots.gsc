@@ -11,33 +11,33 @@ init()
 }
 onPlayerConnect()
 {
-	level endon("game_ended");
-	for (;;)
-	{
-		level waittill("connected", player);
-		if(!player isentityabot())
-		{
-			  player thread kickBotOnJoin();
-		}
-	}
+    level endon("game_ended");
+    for (;;)
+    {
+        level waittill("connected", player);
+        if (!player isentityabot())
+        {
+            player thread kickBotOnJoin();
+        }
+    }
 }
 
 isentityabot()
 {
-	return isSubStr(self getguid(), "bot");
+    return isSubStr(self getguid(), "bot");
 }
 serverBotFill()
 {
     level endon("game_ended");
-	  level waittill("connected", player);
-    for(;;)
+    level waittill("connected", player);
+    for (;;)
     {
-        while(level.players.size < 14 && !level.gameended)
+        while (level.players.size < 14 && !level.gameended)
         {
             self spawnBots(1);
             wait 1;
         }
-        if(level.players.size >= 17 && contBots() > 0)
+        if (level.players.size >= 17 && contBots() > 0)
             kickbot();
 
         wait 0.05;
@@ -47,9 +47,9 @@ serverBotFill()
 contBots()
 {
     bots = 0;
-    foreach (player in level.players) 
+    foreach (player in level.players)
     {
-        if (player isentityabot()) 
+        if (player isentityabot())
         {
             bots++;
         }
@@ -59,15 +59,15 @@ contBots()
 
 spawnBots(a)
 {
-    spawn_bots(a, "autoassign"); 
+    spawn_bots(a, "autoassign");
 }
 
 kickbot()
 {
     level endon("game_ended");
-    foreach (player in level.players) 
+    foreach (player in level.players)
     {
-        if (player isentityabot()) 
+        if (player isentityabot())
         {
             player bot_drop();
             break;
@@ -78,11 +78,11 @@ kickbot()
 kickBotOnJoin()
 {
     level endon("game_ended");
-    foreach (player in level.players) 
+    foreach (player in level.players)
     {
-        if (player isentityabot()) 
+        if (player isentityabot())
         {
-	          player bot_drop();
+            player bot_drop();
             break;
         }
     }
