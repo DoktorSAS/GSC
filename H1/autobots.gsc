@@ -19,6 +19,10 @@ onPlayerConnect()
         {
             player thread kickBotOnJoin();
         }
+        else
+        {
+            player maps\mp\bots\_bots_util::bot_set_difficulty( common_scripts\utility::random( [ "hardened", "veteran" ] ), undefined );
+        }
     }
 }
 
