@@ -121,7 +121,7 @@ doWhitdraw(player, args)
             }
             else
             {
-                if (isInteger(args[1]) && player.pers["bank"] >= int(args[1]))
+                if (isInteger(args[1]) && args[1] > 0 && player.pers["bank"] >= int(args[1]))
                 {
                     player.score = player.score + int(args[1]);
                     player.pers["bank"] = int(player.pers["bank"]) - int(args[1]);
