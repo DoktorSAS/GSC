@@ -104,7 +104,7 @@ doWhitdraw(player, args)
     if (getDvarIntDefault("sv_allowchatbank", 1) == 0)
     {
     }
-    else if ((isDefined(player.whos_who_effects_active) && player.whos_who_effects_active) || player.fake_death)
+    else if ((isDefined(player.whos_who_effects_active) && player.whos_who_effects_active) || (isDefined(player.fake_death) && player.fake_death))
     {
         player tell("Command disable during last stand with WhosWho perk");
     }
@@ -183,7 +183,7 @@ doPay(player, args)
     if (getDvarIntDefault("sv_allowchatpayments", 1) == 0)
     {
     }
-    else if ((isDefined(player.whos_who_effects_active) && player.whos_who_effects_active) || player.fake_death) // Prevent money dupe
+    else if ((isDefined(player.whos_who_effects_active) && player.whos_who_effects_active) || (isDefined(player.fake_death) && player.fake_death)) // Prevent money dupe
     {
         player tell("Command disable during last stand with WhosWho perk");
     }
