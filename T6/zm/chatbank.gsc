@@ -151,11 +151,11 @@ doDeposit(player, args)
         {
             if (args[1] == "all")
             {
+                score = player.score;
                 player.pers["bank"] = player.pers["bank"] + player.score;
                 player.score = 0;
                 player updateBankValue(player.pers["bank"]);
-                player tell("^2$^7" + valueToString(player.score) + " deposited");
-
+                player tell("^2$^7" + valueToString(score) + " deposited");
             }
             else
             {
