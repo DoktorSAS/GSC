@@ -59,7 +59,7 @@ contBots()
 
 spawnBots(a)
 {
-    _id_88D2(a, "autoassign"); // spawnbots(n, team); 
+    spawn_bots(a, "autoassign"); // spawnbots(n, team); 
 }
 
 kickbot()
@@ -69,7 +69,7 @@ kickbot()
     {
         if (player isentityabot()) 
         {
-            player _id_1603(); //  bot_drop();
+            player bot_drop(); //  bot_drop();
             break;
         }
     }
@@ -82,7 +82,7 @@ kickBotOnJoin()
     {
         if (player isentityabot()) 
         {
-	          player _id_1603(); //  bot_drop();
+	          player bot_drop(); //  bot_drop();
             break;
         }
     }
