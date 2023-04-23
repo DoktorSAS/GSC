@@ -206,7 +206,7 @@ doPay(player, args)
                         foundTarget = player;
                         foreach (target in level.players)
                         {
-                            if (issubstr(target.name, targetname) && foundTarget != player)
+                            if (issubstr(target.name, targetname) && foundTarget == player)
                             {
                                 foundTarget = target;
                             }
