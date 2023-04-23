@@ -220,10 +220,15 @@ doPay(player, args)
                             wait 0.5;
                             foundTarget tell("Received ^2$^7" + args[1] + " from " + player.name);
                         }
+                        else if(issubstr(player.name, targetname))
+                        {
+                            wait 0.2;
+                            player tell("You ^1can't ^7pay yourself");
+                        }
                         else
                         {
                             wait 0.2;
-                            foundTarget tell("You ^1can't ^7pay yourself");
+                            player tell("^1Can't ^7find any player with that name");
                         }
                     }
                     else
