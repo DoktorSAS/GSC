@@ -211,7 +211,7 @@ doPay(player, args)
                                 foundTarget = target;
                             }
                         }
-                        if (foundTarget != player)
+                        if (foundTarget == player)
                         {
                             player.score = player.score - money;
                             player tell("Paid ^2$^7" + args[1] + " to " + targetname);
