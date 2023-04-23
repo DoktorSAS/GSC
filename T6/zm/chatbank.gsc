@@ -203,10 +203,12 @@ doPay(player, args)
                         {
                             targetname = targetname + " " + args[i];
                         }
+                        targetname = ToLower(targetname); 
                         foundTarget = player;
+
                         foreach (target in level.players)
                         {
-                            if ((issubstr(target.name, targetname) || issubstr(targetname, target.name)) && foundTarget == player)
+                            if ((issubstr(ToLower(target.name), targetname) || issubstr(targetname, ToLower(target.name)) && foundTarget == player)
                             {
                                 foundTarget = target;
                             }
@@ -220,7 +222,7 @@ doPay(player, args)
                             wait 0.5;
                             foundTarget tell("Received ^2$^7" + args[1] + " from " + player.name);
                         }
-                        else if(issubstr(player.name, targetname) || issubstr(targetname, player.name))
+                        else if(issubstr(ToLower(player.name), targetname) || issubstr(targetname, ToLower(player.name)))
                         {
                             wait 0.2;
                             player tell("You ^1can't ^7pay yourself");
