@@ -4,30 +4,27 @@
 #include maps\mp\gametypes_zm\_hud_message;
 
 /*
-    Mod: zm_cperks.gsc
+    Mod: test_cperk.gsc
     Developed by @DoktorSAS
-    
-    Description:
-    This script its just an utils to drag and drop custom perks.
 
-    level._custom_perks[str_perk].alias = str_perk;
-    level._custom_perks[str_perk].cost = n_perk_cost;
-    level._custom_perks[str_perk].hint_string = str_hint_string;
-    level._custom_perks[str_perk].perk_bottle = str_perk_bottle_weapon;
-    maps\mp\zombies\_zm_perks::register_perk_basic_info( "specialty_flakjacket", "divetonuke", 2000, &"ZOMBIE_PERK_DIVETONUKE", "zombie_perk_bottle_nuke" );
-
-    level._custom_perks[str_perk].clientfield_register = func_clientfield_register;
-    level._custom_perks[str_perk].clientfield_set = func_clientfield_set;
-    maps\mp\zombies\_zm_perks::register_perk_clientfields( "specialty_flakjacket", ::divetonuke_register_clientfield, ::divetonuke_set_clientfield );
-
-    level._custom_perks[str_perk].perk_machine_set_kvps = func_perk_machine_setup;
-    level._custom_perks[str_perk].perk_machine_thread = func_perk_machine_thread;
-    maps\mp\zombies\_zm_perks::register_perk_machine( "specialty_flakjacket", ::divetonuke_perk_machine_setup, ::divetonuke_perk_machine_think );
-
-    level._custom_perks[str_perk].host_migration_func = func_host_migration;
-    maps\mp\zombies\_zm_perks::register_perk_host_migration_func( "specialty_flakjacket", ::divetonuke_host_migration_func );
+    TEMPLATE EXEMPLE OF A CUSTOM PERK
 */
 
+// test_cperk.gsc
+init()
+{
+    printf("unlimitedsprint.gsc test_cperk.gsc");
+    maps\mp\zombies\zm_cperks::register_cperk_basic_info("unlimitedsprint", "Sprint Cola", 2000, "zombie_perk_bottle_jugg");
+    maps\mp\zombies\zm_cperks::register_cperk_precache_func("unlimitedsprint", ::unlimitedsprint_precache);
+    maps\mp\zombies\zm_cperks::register_cperk_machine("unlimitedsprint", ::unlimitedsprint_perk_machine_setup, ::unlimitedsprint_perk_machine_think); 
+    maps\mp\zombies\zm_cperks::register_cperk_trigger_think("unlimitedsprint", ::default_vending_think, ::default_give_perk);
+    waittillframeend;
+
+    flag_wait( "initial_blackscreen_passed" );
+    flag_wait( "start_zombie_round_logic" );
+    wait 1;
+    level notify( "unlimitedsprint_on" );   
+}
 
 unlimitedsprint_precache()
 {
@@ -139,20 +136,4 @@ unlimitedsprint_perk_machine_think( cperk_id )
 unlimitedsprint_host_migration_func()
 {
     
-}
-
-// test_cperk.gsc
-init()
-{
-    printf("unlimitedsprint.gsc test_cperk.gsc");
-    maps\mp\zombies\zm_cperks::register_cperk_basic_info("unlimitedsprint", "Sprint Cola", 2000, "zombie_perk_bottle_jugg");
-    maps\mp\zombies\zm_cperks::register_cperk_precache_func("unlimitedsprint", ::unlimitedsprint_precache);
-    maps\mp\zombies\zm_cperks::register_cperk_machine("unlimitedsprint", ::unlimitedsprint_perk_machine_setup, ::unlimitedsprint_perk_machine_think); 
-    maps\mp\zombies\zm_cperks::register_cperk_trigger_think("unlimitedsprint", ::default_vending_think, ::default_give_perk);
-    waittillframeend;
-
-    flag_wait( "initial_blackscreen_passed" );
-    flag_wait( "start_zombie_round_logic" );
-    wait 1;
-    level notify( "unlimitedsprint_on" );   
 }
