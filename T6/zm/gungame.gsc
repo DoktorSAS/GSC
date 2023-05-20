@@ -168,7 +168,7 @@ handlePlayerHUD()
 
             if(self.gg_kills_target == 0)
             {
-                if(self.gg_index < level.gg_weapons.size)
+                if(self.gg_index < level.gg_weapons.size-1)
                 {
                     self.gg_index = self.gg_index + 1;
                     self.gg_kills_target = int(level.gg_weapons[self.gg_index].kills);
