@@ -180,9 +180,8 @@ handlePlayerHUD()
                 }
                 else
                 {
-                    rotation--;
+                    self.gg_rotation--;
                 }
-                
             }
         }
     }
