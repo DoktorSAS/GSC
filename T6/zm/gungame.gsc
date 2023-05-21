@@ -227,26 +227,12 @@ insertWeapon(weapon_id, kills)
 
 getWeaponNameByID( weapon_id )
 {
-    switch(weapon_id)
+    weapon_name = getweapondisplayname( weapon_id );
+    if(!isDefined(weapon_name) || weapon_name = "")
     {
-        case "rifle":
-            return "RIFLE";
-        case "spread":
-            return "SPREAD";
-        case "SMG":
-            return "SMG";
-        case "pistol":
-            return "PISTOL";
-        case "MG":
-            return "MG";
-        case "rocketlauncher":
-            return "ROCKETLAUNCHER";
-        case "grenade":
-            return "GRANADE";
-        default:
-            return  getWeaponNameByID( weaponclass( weapon_id ) );
+        weapon_name = ToUpper(weaponclass( weapon_id ));
     }
-    return  weaponclass( weapon_id );
+    return weapon_name;
 }
 
 
