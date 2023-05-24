@@ -32,12 +32,44 @@
 */
 
 
-main()
+init()
 {
     printf("zm_cperks.gsc");
+    /*
+        Guide:
+        1. Place your custom perk script in scripts\zm\cperks folder
+        2. Call in the init method of yout custom perks before flag_wait( "initial_blackscreen_passed" ); 
+        Exemple with ammoregen.gsc
+        thread scripts\zm\cperks\ammoregen::init();
+    */
+    thread scripts\zm\cperks\test_cperk::init();
+
+    level thread onPlayerConnect();
+
     flag_wait( "initial_blackscreen_passed" );
     cperk_precache();
     cperk_think();
+}
+
+onPlayerConnect()
+{
+    for (;;)
+    {
+        level waittill("connected", player);
+        player thread cperk_handle_loseperks();
+    }
+}
+
+cperk_handle_loseperks()
+{
+    self endon("disconnect");
+    level endon("end_game");
+    for(;;)
+    {
+        event = self waittill_any_return( "player_suicide", "zombified", "death", "player_downed", "burp");
+        self.cperks = [];
+        self notify("cperk_lost");
+    }
 }
 
 turn_cperk_off()
@@ -45,7 +77,6 @@ turn_cperk_off()
     self.effect delete();
     self notify( "stop_loopsound" );
 }
-
 
 default_give_perk()
 {
@@ -64,7 +95,7 @@ default_vending_think( cperk_id )
             cperk_add(player, cperk_id);
             player.score = player.score - level._custom_cperks[cperk_id].cost;
             player thread [[level._custom_cperks[cperk_id].cperk_give_perk]]();
-            self SetInvisibleToPlayer(player);
+            self setinvisibletoplayer(player);
         }
         wait 1;
     }
@@ -184,7 +215,6 @@ add_cperk_machine(cperk_id, origin, angles)
     printf("add_cperk_machine trigger");
     size = level._custom_cperks[cperk_id].machine_triggers.size;
     level._custom_cperks[cperk_id].machine_triggers[size] = trigger;
-
     printf("add_cperk_machine");
 }
 
@@ -194,10 +224,15 @@ register_cperk_machine(cperk_id, cperk_setup_func, cperk_think_func)
     level._custom_cperks[cperk_id].cperk_think = cperk_think_func;
 }
 
-register_cperk_trigger_think(cperk_id, cperk_trigger_think, cperk_give_perk)
+register_cperk_trigger_think(cperk_id, cperk_trigger_think_func, cperk_give_perk_func)
 {
-    level._custom_cperks[cperk_id].cperk_trigger_think = cperk_trigger_think;
-    level._custom_cperks[cperk_id].cperk_give_perk = cperk_give_perk;
+    level._custom_cperks[cperk_id].cperk_trigger_think_func = cperk_trigger_think_func;
+    level._custom_cperks[cperk_id].cperk_give_perk_func = cperk_give_perk_func;
+}
+
+register_cperk_on_player_death(cperk_id, cperk_cperk_on_player_death_func)
+{
+    level._custom_cperks[cperk_id].cperk_cperk_on_player_death_func = cperk_cperk_on_player_death_func;
 }
 
 register_cperk_precache_func(cperk_id, cperk_func)
