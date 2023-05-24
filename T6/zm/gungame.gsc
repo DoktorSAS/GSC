@@ -13,6 +13,7 @@
 init()
 {
     level thread onPlayerConnect();
+    level thread scripts\zm\overflowFix::initOverFlowFix();
 
     level.gg_rotation = 1; // Set to 0 for infinite rotation
     level.gg_scorebased = 1;
@@ -339,7 +340,7 @@ handlePlayerHUD()
     requirement_next_gun setPoint("LEFT", "LEFT", 0, 0);
 
     requirement_next_gun setValue(int(self.gg_requirement_target));
-    next_gun setText("Next: " + getWeaponNameByID(level.gg_weapons[self.gg_index].weapon_id));
+    next_gun scripts\zm\overflowFix::setSafeText(self,"Next: " + getWeaponNameByID(level.gg_weapons[self.gg_index].weapon_id));
     kills_before = 0;
 
     if (level.gg_scorebased)
@@ -365,7 +366,7 @@ handlePlayerHUD()
                         self.gg_index = self.gg_index + 1;
                         self.gg_requirement_target = int(level.gg_weapons[self.gg_index].requirement);
                         requirement_next_gun setValue(int(self.gg_requirement_target));
-                        next_gun setText("Next: " + getWeaponNameByID(level.gg_weapons[self.gg_index+1].weapon_id));
+                        next_gun scripts\zm\overflowFix::setSafeText(self,"Next: " + getWeaponNameByID(level.gg_weapons[self.gg_index+1].weapon_id));
                         self takeallweapons();
                         self giveweapon(level.gg_weapons[self.gg_index].weapon_id);
                         self SwitchToWeaponImmediate(level.gg_weapons[self.gg_index].weapon_id);
@@ -404,7 +405,7 @@ handlePlayerHUD()
                         self.gg_index = self.gg_index + 1;
                         self.gg_requirement_target = int(level.gg_weapons[self.gg_index].requirement);
                         requirement_next_gun setValue(int(self.gg_requirement_target));
-                        next_gun setText("Next: " + getWeaponNameByID(level.gg_weapons[self.gg_index+1].weapon_id));
+                        next_gun scripts\zm\overflowFix::setSafeText(self,"Next: " + getWeaponNameByID(level.gg_weapons[self.gg_index+1].weapon_id));
                         self takeallweapons();
                         self giveweapon(level.gg_weapons[self.gg_index].weapon_id);
                         self SwitchToWeaponImmediate(level.gg_weapons[self.gg_index].weapon_id);
