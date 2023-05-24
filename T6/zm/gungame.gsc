@@ -50,6 +50,12 @@ init()
         insertWeapon("galil_upgraded_zm");
         insertWeapon("barretm82_upgraded_zm");
         insertWeapon("dsr50_upgraded_zm");
+        insertWeapon("usrpg_zm");
+        insertWeapon("ray_gun_zm");
+        insertWeapon("raygun_mark2_zm");
+        insertWeapon("usrpg_upgraded_zm");
+        insertWeapon("ray_gun_upgraded_zm");
+        insertWeapon("raygun_mark2_upgraded_zm");
         break;
     case "prison":
         insertWeapon("m1911_zm");
