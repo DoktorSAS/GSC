@@ -14,10 +14,10 @@
 init()
 {
     printf("unlimitedsprint.gsc test_cperk.gsc");
-    maps\mp\zombies\zm_cperks::register_cperk_basic_info("unlimitedsprint", "Sprint Cola", 2000, "zombie_perk_bottle_jugg");
-    maps\mp\zombies\zm_cperks::register_cperk_precache_func("unlimitedsprint", ::unlimitedsprint_precache);
-    maps\mp\zombies\zm_cperks::register_cperk_machine("unlimitedsprint", ::unlimitedsprint_perk_machine_setup, ::unlimitedsprint_perk_machine_think); 
-    maps\mp\zombies\zm_cperks::register_cperk_trigger_think("unlimitedsprint", ::default_vending_think, ::default_give_perk);
+    scripts\zm\_zm_cperks::register_cperk_basic_info("unlimitedsprint", "Sprint Cola", 2000, "zombie_perk_bottle_jugg");
+    scripts\zm\_zm_cperks::register_cperk_precache_func("unlimitedsprint", ::unlimitedsprint_precache);
+    scripts\zm\_zm_cperks::register_cperk_machine("unlimitedsprint", ::unlimitedsprint_perk_machine_setup, ::unlimitedsprint_perk_machine_think); 
+    scripts\zm\_zm_cperks::register_cperk_trigger_think("unlimitedsprint", ::default_vending_think, ::default_give_perk);
     waittillframeend;
 
     flag_wait( "initial_blackscreen_passed" );
@@ -32,6 +32,7 @@ unlimitedsprint_precache()
     level._effect["unlimitedsprint"] = loadfx( "misc/fx_zombie_cola_jugg_on" );
     level.machine_assets["unlimitedsprint"] = spawnstruct();
     level.machine_assets["unlimitedsprint"].weapon = "zombie_perk_bottle_jugg";
+    level.machine_assets["money_equal_power"].bottle = "specialty_armorvest";
     level.machine_assets["unlimitedsprint"].off_model = level.machine_assets[ "juggernog" ].off_model;
     level.machine_assets["unlimitedsprint"].on_model = level.machine_assets[ "juggernog" ].on_model;
     //level.machine_assets["unlimitedsprint"].power_on_callback = ::custom_vending_power_on;
@@ -115,7 +116,7 @@ unlimitedsprint_perk_machine_think( cperk_id )
          for ( i = 0; i < machine_triggers.size; i++ )
         {
             machine_triggers[i] sethintstring( level._custom_cperks["unlimitedsprint"].hint_string );
-            machine_triggers[i] thread [[level._custom_cperks["unlimitedsprint"].cperk_trigger_think]]( "unlimitedsprint" );
+            machine_triggers[i] thread [[level._custom_cperks["unlimitedsprint"].cperk_trigger_think_func]]( "unlimitedsprint" );
         }
         array_thread( machine, ::unlimitedsprint_watch_for_emp);
 
@@ -128,7 +129,7 @@ unlimitedsprint_perk_machine_think( cperk_id )
         if ( isdefined( level.machine_assets["unlimitedsprint"].power_off_callback ) )
             array_thread( machine, level.machine_assets["unlimitedsprint"].power_off_callback );
 
-        array_thread( machine, maps\mp\zombies\zm_cperks::turn_cperk_off );
+        array_thread( machine, scripts\zm\_zm_cperks::turn_cperk_off );
     }
 }
 
