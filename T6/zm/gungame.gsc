@@ -419,6 +419,10 @@ handlePlayerHUD()
         }
     }
     level notify("end_game");
+    foreach(player in level.players)
+    {
+        player EnableInvulnerability();
+    }
 }
 
 // gg.gsc
