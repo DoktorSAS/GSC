@@ -4,13 +4,13 @@
 #include maps\mp\gametypes_zm\_hud_message;
 
 /*
-    Mod: money_equal_power.gsc
+    Mod: test_cperk.gsc
     Developed by @DoktorSAS
 
     TEMPLATE EXEMPLE OF A CUSTOM PERK
 */
 
-// money_equal_power.gsc
+// test_cperk.gsc
 init()
 {
     printf("money_equal_power.gsc test_cperk.gsc");
@@ -18,24 +18,24 @@ init()
     scripts\zm\_zm_cperks::register_cperk_precache_func("money_equal_power", ::money_equal_power_precache);
     scripts\zm\_zm_cperks::register_cperk_machine("money_equal_power", ::money_equal_power_perk_machine_setup, ::money_equal_power_perk_machine_think); 
     scripts\zm\_zm_cperks::register_cperk_trigger_think("money_equal_power");
+    scripts\zm\_zm_cperks::register_cperk_callback_on_actor_damage( "money_equal_power", ::actor_damage_override_wrapper );
     waittillframeend;
 
     flag_wait( "initial_blackscreen_passed" );
     flag_wait( "start_zombie_round_logic" );
     wait 1;
     level notify( "money_equal_power_on" );   
-
-    level.callbackactordamage_original = level.callbackactordamage;
-    level.callbackactordamage = ::actor_damage_override_wrapper;
 }
 
 actor_damage_override_wrapper( inflictor, attacker, damage, flags, meansofdeath, weapon, vpoint, vdir, shitloc, psoffsettime, boneindex )
 {
-    [[level.callbackactordamage_original]]( inflictor, attacker, damage, flags, meansofdeath, weapon, vpoint, vdir, shitloc, psoffsettime, boneindex );
     if(scripts\zm\_zm_cperks::has_cperk( attacker, "money_equal_power") && self.health > 0 && IsAlive(self))
     {
-        damage = int(attacker.score/1000);
-        attacker IPrintLn(damage);
+        damage = int(attacker.score/250);
+        if(damage > 500)
+        {
+            damage = 500;
+        }
         self finishactordamage( inflictor, attacker, damage, flags, meansofdeath, weapon, vpoint, vdir, shitloc, psoffsettime, boneindex );
     }
 }
@@ -86,7 +86,14 @@ money_equal_power_watch_for_emp()
 money_equal_power_perk_machine_setup()
 {
     printf("money_equal_power_perk_machine_setup");
-    add_cperk_machine("money_equal_power", (2002, 718, -55), ( 0, -128, 0 ));
+    map = getDvar("ui_zm_mapstartlocation");
+    switch(map)
+    {
+        case "town":
+            add_cperk_machine("money_equal_power", (2002, 718, -55), ( 0, -128, 0 ));
+        break;
+    }
+    
 }
 
 money_equal_power_perk_machine_think( cperk_id )
