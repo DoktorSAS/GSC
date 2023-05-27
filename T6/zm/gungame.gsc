@@ -9,6 +9,10 @@
 /*
     Mod: GunGame
     Developed by @DoktorSAS
+    
+    Requirements:
+    The overflowFix.gsc is needed to provent crash from string overflow. The file is
+    provided in this github. 
 */
 init()
 {
