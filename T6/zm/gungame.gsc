@@ -11,7 +11,7 @@
     Developed by @DoktorSAS
     
     Requirements:
-    The overflowFix.gsc is needed to provent crash from string overflow. The file is
+    The overflowFix.gsc is needed to prevent crash from string overflow. The file is
     provided in this github. 
 */
 init()
@@ -24,6 +24,44 @@ init()
     map = getDvar("ui_zm_mapstartlocation");
     switch (map)
     {
+    case "transit":
+        insertWeapon("m1911_zm");
+        insertWeapon("fiveseven_zm");
+        insertWeapon("beretta93r_zm");
+        insertWeapon("judge_zm");
+        insertWeapon("fivesevendw_zm");
+        insertWeapon("mp5k_zm");
+        insertWeapon("870mcs_zm");
+        insertWeapon("rottweil72_zm");
+        insertWeapon("saiga12_zm");
+        insertWeapon("tar21_zm");
+        insertWeapon("fnfal_zm");
+        insertWeapon("m14_zm");
+        insertWeapon("galil_zm");
+        insertWeapon("barretm82_zm");
+        insertWeapon("dsr50_zm");
+        insertWeapon("fiveseven_upgraded_zm");
+        insertWeapon("beretta93r_upgraded_zm");
+        insertWeapon("judge_upgraded_zm");
+        insertWeapon("fivesevendw_upgraded_zm");
+        insertWeapon("m1911_upgraded_zm");
+        insertWeapon("mp5k_upgraded_zm");
+        insertWeapon("870mcs_upgraded_zm");
+        insertWeapon("rottweil72_upgraded_zm");
+        insertWeapon("saiga12_upgraded_zm");
+        insertWeapon("tar21_upgraded_zm");
+        insertWeapon("fnfal_upgraded_zm");
+        insertWeapon("m14_upgraded_zm");
+        insertWeapon("galil_upgraded_zm");
+        insertWeapon("barretm82_upgraded_zm");
+        insertWeapon("dsr50_upgraded_zm");
+        insertWeapon("usrpg_zm");
+        insertWeapon("ray_gun_zm");
+        insertWeapon("raygun_mark2_zm");
+        insertWeapon("usrpg_upgraded_zm");
+        insertWeapon("ray_gun_upgraded_zm");
+        insertWeapon("raygun_mark2_upgraded_zm");
+        break;
     case "town":
         insertWeapon("m1911_zm");
         insertWeapon("fiveseven_zm");
