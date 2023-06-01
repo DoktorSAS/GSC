@@ -13,7 +13,7 @@
 // test_cperk.gsc
 init()
 {
-    printf("money_equal_power.gsc test_cperk.gsc");
+    //printf("money_equal_power.gsc test_cperk.gsc");
     scripts\zm\_zm_cperks::register_cperk_basic_info("money_equal_power", "Money = Power", 2000, "zombie_perk_bottle_jugg");
     scripts\zm\_zm_cperks::register_cperk_precache_func("money_equal_power", ::money_equal_power_precache);
     scripts\zm\_zm_cperks::register_cperk_machine("money_equal_power", ::money_equal_power_perk_machine_setup, ::money_equal_power_perk_machine_think); 
@@ -42,25 +42,40 @@ actor_damage_override_wrapper( inflictor, attacker, damage, flags, meansofdeath,
 
 money_equal_power_precache()
 {
-    printf("money_equal_power_precache");
+    //printf("money_equal_power_precache");
     level._effect["money_equal_power"] = loadfx( "misc/fx_zombie_cola_jugg_on" );
     level.machine_assets["money_equal_power"] = spawnstruct();
     level.machine_assets["money_equal_power"].weapon = "zombie_perk_bottle_jugg";
+    /*
+        specialty_fastreload_zombies
+        specialty_marathon_zombies
+        specialty_doubletap_zombies
+        specialty_armorvest
+        specialty_fastreload_zombies
+    */
     level.machine_assets["money_equal_power"].bottle = "specialty_armorvest";
+    /*
+        tombstone_light
+        jugger_light
+        marathon_light
+    */
+    level.machine_assets["money_equal_power"].light = "jugger_light";
     level.machine_assets["money_equal_power"].off_model = level.machine_assets[ "juggernog" ].off_model;
     level.machine_assets["money_equal_power"].on_model = level.machine_assets[ "juggernog" ].on_model;
     //level.machine_assets["money_equal_power"].power_on_callback = ::custom_vending_power_on;
     //level.machine_assets["money_equal_power"].power_off_callback = ::custom_vending_power_off;
+    level.machine_assets["money_equal_power"].icon = "specialty_fastreload_zombies";
+    level.machine_assets["money_equal_power"].iconColor = (0.6, 0, 0);
 }
 
 money_equal_power_register_clientfield()
 {
-    printf("money_equal_power_register_clientfield");
+    //printf("money_equal_power_register_clientfield");
 }
 
 money_equal_power_set_clientfield()
 {
-    printf("money_equal_power_set_clientfield");
+    //printf("money_equal_power_set_clientfield");
 }
 
 
@@ -85,12 +100,42 @@ money_equal_power_watch_for_emp()
 
 money_equal_power_perk_machine_setup()
 {
-    printf("money_equal_power_perk_machine_setup");
+    //printf("money_equal_power_perk_machine_setup");
     map = getDvar("ui_zm_mapstartlocation");
     switch(map)
     {
+        
+        case "rooftop":
+            add_cperk_machine("money_equal_power", (1109, 2329, 3040), ( 0, 90, 0 ));
+        break;
         case "town":
             add_cperk_machine("money_equal_power", (2002, 718, -55), ( 0, -128, 0 ));
+        break;
+        case "transit":
+            if(getDvar("g_gametype") == "zclassic")
+            {
+                // tranzit
+                add_cperk_machine("money_equal_power", (8816, -5928, 52), ( 0, -90, 0 ));
+            }
+            else
+            {
+                // bus depot
+            }
+        break;
+        case "processing":
+            add_cperk_machine("money_equal_power", (860, -1864, 49), ( 0, -120, 0 ));
+        break;
+        case "prison":
+            add_cperk_machine("money_equal_power", (860, -1864, 49), ( 0, -120, 0 ));
+        break;
+        case "tomb":
+            add_cperk_machine("money_equal_power", (8816, -5928, 52), ( 0, -90, 0 ));
+        break;
+        case "farm":
+            add_cperk_machine("money_equal_power", (8500, -5599, 50), ( 0, 0, 0 ));
+        break;
+        case "nuked":
+            add_cperk_machine("money_equal_power", (1142, 190, 79), ( 0, -75, 0 ));
         break;
     }
     
@@ -98,7 +143,7 @@ money_equal_power_perk_machine_setup()
 
 money_equal_power_perk_machine_think( cperk_id )
 {
-    printf("money_equal_power_perk_machine_think");
+    //printf("money_equal_power_perk_machine_think");
     waittillframeend;
     while(true)
     {
@@ -128,7 +173,7 @@ money_equal_power_perk_machine_think( cperk_id )
             machine[i].effect = spawn( "script_model", machine[i].origin);
             machine[i].effect.angles = machine[i].angles;
             machine[i].effect setmodel( level.machine_assets["money_equal_power"].off_model );
-            machine[i].effect thread perk_fx( "jugger_light" );
+            machine[i].effect thread perk_fx( level.machine_assets["money_equal_power"].light );
             machine[i].effect thread play_loop_on_machine();
         }
 
@@ -137,7 +182,7 @@ money_equal_power_perk_machine_think( cperk_id )
         for ( i = 0; i < machine_triggers.size; i++ )
         {
             machine_triggers[i] sethintstring( level._custom_cperks["money_equal_power"].hint_string );
-            printf(i + ": trigger thread!");
+            //printf(i + ": trigger thread!");
             machine_triggers[i] thread [[level._custom_cperks["money_equal_power"].cperk_trigger_think_func]]( "money_equal_power" );
         }
         array_thread( machine, ::money_equal_power_watch_for_emp);
