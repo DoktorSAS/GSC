@@ -34,7 +34,7 @@
 
 init()
 {
-    printf("zm_cperks.gsc");
+    //printf("zm_cperks.gsc");
     /*
         Guide:
         1. Place your custom perk script in scripts\zm\cperks folder
@@ -61,7 +61,7 @@ actor_damage_override_wrapper( inflictor, attacker, damage, flags, meansofdeath,
     [[level.callbackactordamage_original]]( inflictor, attacker, damage, flags, meansofdeath, weapon, vpoint, vdir, shitloc, psoffsettime, boneindex );
     foreach(cperks in level._custom_cperks)
     {
-        printf("actor_damage_override_wrapper " + cperks.alias);
+        //printf("actor_damage_override_wrapper " + cperks.alias);
         thread [[cperks.callback_on_actor_damage_func]](inflictor, attacker, damage, flags, meansofdeath, weapon, vpoint, vdir, shitloc, psoffsettime, boneindex);
     }
 }
@@ -72,6 +72,73 @@ onPlayerConnect()
     {
         level waittill("connected", player);
         player thread cperk_handle_loseperks();
+        player thread cperks_handle_ui();
+    }
+}
+
+clientdrawshader( shader, x, y, width, height, color, alpha, sort )
+{
+	hud = newclienthudelem( self );
+	hud.elemtype = "icon";
+	hud.color = color;
+	hud.alpha = alpha;
+	hud.sort = sort;
+	hud.children = [];
+	hud setparent( level.uiparent );
+	hud setshader( shader, width, height );
+	hud.x = x;
+	hud.y = y;
+    hud.hidewheninmenu = 1;
+	return hud;
+}
+
+affectElement(type, time, value)
+{
+    if(type == "x" || type == "y")
+        self moveOverTime(time);
+    else
+        self fadeOverTime(time);
+    if(type == "x")
+        self.x = value;
+    if(type == "y")
+        self.y = value;
+    if(type == "alpha")
+        self.alpha = value;
+    if(type == "color")
+        self.color = value;
+}
+
+cperks_handle_ui()
+{
+    self endon("disconnect");
+    level endon("end_game");
+    level endon("clear_server");
+    hud = [];
+    for(i = 0; i < level._custom_cperks.size; i++)
+    {
+        hud[i] = self clientdrawshader( "white", -350 + (30*i), 0, 25, 25, ( 1, 1, 1), 0, 100 );
+    }
+
+    for(;;)
+    {
+        self waittill("update_cperk_ui", cperk_id);
+        if(!isDefined(cperk_id))
+        {
+            for(i = 0; i < level._custom_cperks.size; i++)
+            {
+                hud[i] affectElement("alpha", 0, 0);
+            }
+        }
+        else
+        {
+            index = self.cperks.size-1;
+            hud[index] setShader(level.machine_assets[cperk_id].icon, 25, 25);
+            if(isDefined(level.machine_assets[cperk_id].iconColor))
+            {
+                hud[index].color = level.machine_assets[cperk_id].iconColor;
+            }
+            hud[index] affectElement("alpha", 1, 1);
+        }
     }
 }
 
@@ -81,13 +148,14 @@ cperk_handle_loseperks()
     level endon("end_game");
     for(;;)
     {
-        event = self waittill_any_return( "player_suicide", "zombified", "death", "player_downed", "burp");
+        event = self waittill_any_return( "player_suicide", "zombified", "death", "player_downed");
         self.cperks = [];
         self notify("cperk_lost");
+        self notify("update_cperk_ui");
         foreach(cperks in level._custom_cperks)
         {
-            printf("cperk_handle_loseperks " + cperks.alias);
-            thread [[cperks.on_perk_lost_func]](inflictor, attacker, damage, flags, meansofdeath, weapon, vpoint, vdir, shitloc, psoffsettime, boneindex);
+            //printf("cperk_handle_loseperks " + cperks.alias);
+            thread [[cperks.on_perk_lost_func]]();
         }
     }
 }
@@ -145,7 +213,7 @@ default_vending_think( cperk_id )
 {
     level endon("end_game");
     level endon( cperk_id + "_off" );
-    printf("default_vending_think" + cperk_id);
+    //printf("default_vending_think" + cperk_id);
     while( true )
     {
         self waittill("trigger", player);
@@ -195,23 +263,24 @@ cperk_add(player, cperk_id)
         player.cperks = [];
     }
     player.cperks[cperk_id] = 1;
+    player notify("update_cperk_ui", cperk_id);
 }
 
 cperk_precache()
 {
     if(isDefined(level._custom_cperks) && level._custom_cperks.size > 0)
     {
-        printf("zm_cperks.gsc cperk_precache " + level._custom_cperks.size);
+        //printf("zm_cperks.gsc cperk_precache " + level._custom_cperks.size);
         /*a_keys = getarraykeys( level._custom_cperks );
         for(i = 0; i < level._custom_cperks.size; i++)
         {
-            printf("zm_cperks.gsc cperk_precache " + a_keys[i]);
+            //printf("zm_cperks.gsc cperk_precache " + a_keys[i]);
             //level thread [[level._custom_cperks[a_keys[i]].do_precache]]();
         }*/
 
         foreach(cperks in level._custom_cperks)
         {
-            printf("zm_cperks.gsc cperk_precache " + cperks.alias);
+            //printf("zm_cperks.gsc cperk_precache " + cperks.alias);
             level [[cperks.do_precache]]();
         }
     }
@@ -221,11 +290,11 @@ cperk_think()
 {
     if(isDefined(level._custom_cperks) && level._custom_cperks.size > 0)
     {
-        printf("zm_cperks.gsc cperk_think " + level._custom_cperks.size);
+        //printf("zm_cperks.gsc cperk_think " + level._custom_cperks.size);
         /*a_keys = getarraykeys( level._custom_cperks );
         for(i = 0; i < level._custom_cperks.size; i++)
         {
-            printf("zm_cperks.gsc cperk_think " + a_keys[i]);
+            //printf("zm_cperks.gsc cperk_think " + a_keys[i]);
             //[[level._custom_cperks[a_keys[i]].cperk_setup]]();
             //level thread [[level._custom_cperks[a_keys[i]].cperk_think]]();
             waittillframeend;
@@ -233,7 +302,7 @@ cperk_think()
 
         foreach(cperks in level._custom_cperks)
         {
-            printf("zm_cperks.gsc cperk_think " + cperks.alias);
+            //printf("zm_cperks.gsc cperk_think " + cperks.alias);
             level [[cperks.cperk_setup]]();
             level thread [[cperks.cperk_think]]();
         }
@@ -246,7 +315,7 @@ add_cperk_machine(cperk_id, origin, angles)
     {
         level._custom_cperks[cperk_id].machine = [];
     }
-    printf("add_cperk_machine level._custom_cperks[cperk_id].machine "  + level._custom_cperks[cperk_id].machine.size);
+    //printf("add_cperk_machine level._custom_cperks[cperk_id].machine "  + level._custom_cperks[cperk_id].machine.size);
     size = level._custom_cperks[cperk_id].machine.size;
     if(size < 0)
     {
@@ -257,7 +326,7 @@ add_cperk_machine(cperk_id, origin, angles)
     machine.collision = spawn("script_model", origin);
     machine.collision setModel( "zm_collision_perks1" );
     machine.collision.angles = angles;
-    printf("add_cperk_machine machine");
+    //printf("add_cperk_machine machine");
 
     level._custom_cperks[cperk_id].machine[size] = machine;
 
@@ -265,17 +334,17 @@ add_cperk_machine(cperk_id, origin, angles)
     {
         level._custom_cperks[cperk_id].machine_triggers = [];
     }
-    printf("add_cperk_machine level._custom_cperks[cperk_id].machine_triggers "  + level._custom_cperks[cperk_id].machine_triggers.size);
+    //printf("add_cperk_machine level._custom_cperks[cperk_id].machine_triggers "  + level._custom_cperks[cperk_id].machine_triggers.size);
 
     trigger = spawn( "trigger_radius_use", origin+(0,0,70), 0, 72, 64 );
     trigger usetriggerrequirelookat();
     trigger sethintstring( "default hint string" );
     trigger setcursorhint( "HINT_NOICON" );
     trigger triggerignoreteam();
-    printf("add_cperk_machine trigger");
+    //printf("add_cperk_machine trigger");
     size = level._custom_cperks[cperk_id].machine_triggers.size;
     level._custom_cperks[cperk_id].machine_triggers[size] = trigger;
-    printf("add_cperk_machine");
+    //printf("add_cperk_machine");
 }
 
 register_cperk_callback_on_actor_damage( cperk_id, callback_on_actor_damage_func )
@@ -324,5 +393,5 @@ register_cperk_basic_info(cperk_id, cperk_alias, cperk_cost, cperk_bottle)
     level._custom_cperks[cperk_id].cost = cperk_cost;
     level._custom_cperks[cperk_id].hint_string = "Hold ^3[{+activate}] ^7for " + cperk_alias + " [Cost: " + cperk_cost + "]";
     level._custom_cperks[cperk_id].perk_bottle = cperk_bottle;
-    printf("register_cperk_basic_info");
+    //printf("register_cperk_basic_info");
 }
