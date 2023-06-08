@@ -416,7 +416,7 @@ destroyHudsOnEndGame( huds )
     level waittill("end_game");
     foreach(hud in huds)
     {
-        hud destroyElem();
+        hud destroy();
     }
 }
 
