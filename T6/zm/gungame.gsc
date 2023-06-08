@@ -9,13 +9,14 @@
 /*
     Mod: GunGame
     Developed by @DoktorSAS
-    
+
     Requirements:
     The overflowFix.gsc is needed to prevent crash from string overflow. The file is
-    provided in this github. 
+    provided in this github.
 */
 init()
 {
+    precacheshader("menu_zm_gamertag");
     level thread onPlayerConnect();
     level thread scripts\zm\overflowFix::initOverFlowFix();
 
@@ -372,22 +373,91 @@ handleWeapons()
     }
 }
 
+createClientHudElement(horzalign, vertalign, alignx, aligny, x, y, alpha, sort, color, shader, width, height)
+{
+    hud = newclienthudelem(self);
+    hud.horzalign = horzalign;
+    hud.vertalign = vertalign;
+    hud.alignx = alignx;
+    hud.aligny = aligny;
+    hud.x = x;
+    hud.y = y;
+    hud.alpha = alpha;
+    hud.sort = sort;
+    hud.color = color;
+    hud setshader(shader, width, height);
+    hud.hidewheninmenu = 1;
+    return hud;
+}
+
+createClientTextElement(horzalign, vertalign, alignx, aligny, x, y, alpha, sort, color, fontscale, text)
+{
+    hud = newclienthudelem(self);
+    hud.horzalign = horzalign;
+    hud.vertalign = vertalign;
+    hud.alignx = alignx;
+    hud.aligny = aligny;
+    hud.x = x;
+    hud.y = y;
+    hud.alpha = alpha;
+    hud.sort = sort;
+    hud.color = color;
+    hud.hidewheninmenu = 1;
+    hud.fontscale = fontscale;
+    if(isDefined(text))
+    {
+        hud scripts\zm\overflowFix::setSafeText(self, text);
+    }
+    return hud;
+}
+
+destroyHudsOnEndGame( huds )
+{
+    level waittill("end_game");
+    foreach(hud in huds)
+    {
+        hud destroyElem();
+    }
+}
+
 handlePlayerHUD()
 {
     self endon("disconnect");
     level endon("end_game");
-    next_gun = self createFontString("objective", 1.2);
-    next_gun setPoint("LEFT", "LEFT", 0, -20);
-    requirement_next_gun = self createFontString("objective", 1.2);
-    requirement_next_gun setPoint("LEFT", "LEFT", 0, 0);
 
-    requirement_next_gun setValue(int(self.gg_requirement_target));
-    next_gun scripts\zm\overflowFix::setSafeText(self,"Next: " + getWeaponNameByID(level.gg_weapons[self.gg_index].weapon_id));
+    start_x = 20;
+    start_y = 170;
+
+    // Hud by ZECxR3ap3r
+    gg_hud = [];
+    gg_hud["background"] = self createClientHudElement("fullscreen", "fullscreen", "left", "top", start_x - 10,start_y - 5, 0.3, 100, (0, 0, 0), "menu_zm_gamertag", 120, 55);
+    gg_hud["gradient"] = self createClientHudElement("fullscreen", "fullscreen", "left", "top", start_x,start_y + 15, 0.9, -100, (0.31, 0, 0), "white", 67, 1); 
+    gg_hud["title"] =  self createClientTextElement("fullscreen", "fullscreen", "left", "top", start_x,start_y, 1, 1, (1, 1, 1), 1.2, "Gun Game"); 
+    gg_hud["next_gun_label"] =  self createClientTextElement("fullscreen", "fullscreen", "left", "top", start_x,start_y+17, 1, 1, (1, 1, 1), 1, "Next Gun: "); 
+    gg_hud["next_gun_value"] =  self createClientTextElement("fullscreen", "fullscreen", "left", "top", start_x + 45, gg_hud["next_gun_label"].y, 1, 1, (1, 1, 1), 1); 
+    gg_hud["next_gun_value"].label = &" ";
+    gg_hud["score_left_label"] =  self createClientTextElement("fullscreen", "fullscreen", "left", "top", start_x, gg_hud["next_gun_label"].y + 11, 1, 1, (1, 1, 1), 1); 
+    gg_hud["score_left_label"].label = &" ";
+    gg_hud["score_left_value"] = self createClientTextElement("fullscreen", "fullscreen", "left", "top", start_x + 45, gg_hud["next_gun_label"].y + 11, 1, 1, (1, 1, 1), 1); 
+    gg_hud["score_left_value"].label = &"^3";
+
+    thread destroyHudsOnEndGame( gg_hud );
+
+    //next_gun = self createFontString("objective", 1.2);
+    //next_gun setPoint("LEFT", "LEFT", 0, -20);
+    //requirement_next_gun = self createFontString("objective", 1.2);
+    //requirement_next_gun setPoint("LEFT", "LEFT", 0, 0);
+
+    //requirement_next_gun setValue(int(self.gg_requirement_target));
+    //next_gun scripts\zm\overflowFix::setSafeText(self, "Next: " + getWeaponNameByID(level.gg_weapons[self.gg_index].weapon_id));
+    gg_hud["score_left_value"] setValue(int(self.gg_requirement_target));
+    gg_hud["next_gun_value"] scripts\zm\overflowFix::setSafeText(self, "^2" + getWeaponNameByID(level.gg_weapons[self.gg_index+1].weapon_id));
     kills_before = 0;
 
     if (level.gg_scorebased)
     {
-        requirement_next_gun.label = &"Score: ";
+        gg_hud["score_left_label"] scripts\zm\overflowFix::setSafeText(self, "Points Left:");
+        //requirement_next_gun.label = &"Score: ";
         score_before = self.score;
         while (self.gg_rotation > 0 && level.gg_rotation > 0)
         {
@@ -400,15 +470,18 @@ handlePlayerHUD()
                 {
                     self.gg_requirement_target = 0;
                 }
-                requirement_next_gun setValue(int(self.gg_requirement_target));
+                //requirement_next_gun setValue(int(self.gg_requirement_target));
+                gg_hud["score_left_value"] setValue(int(self.gg_requirement_target));
                 if (self.gg_requirement_target == 0)
                 {
                     if (self.gg_index < level.gg_weapons.size - 1)
                     {
                         self.gg_index = self.gg_index + 1;
                         self.gg_requirement_target = int(level.gg_weapons[self.gg_index].requirement);
-                        requirement_next_gun setValue(int(self.gg_requirement_target));
-                        next_gun scripts\zm\overflowFix::setSafeText(self,"Next: " + getWeaponNameByID(level.gg_weapons[self.gg_index+1].weapon_id));
+                        //requirement_next_gun setValue(int(self.gg_requirement_target));
+                        //next_gun scripts\zm\overflowFix::setSafeText(self, "Next: " + getWeaponNameByID(level.gg_weapons[self.gg_index + 1].weapon_id));
+                        gg_hud["score_left_value"] setValue(int(self.gg_requirement_target));
+                        gg_hud["next_gun_value"] scripts\zm\overflowFix::setSafeText(self, "^2" + getWeaponNameByID(level.gg_weapons[self.gg_index+1].weapon_id));
                         self takeallweapons();
                         self giveweapon(level.gg_weapons[self.gg_index].weapon_id);
                         self SwitchToWeaponImmediate(level.gg_weapons[self.gg_index].weapon_id);
@@ -417,7 +490,6 @@ handlePlayerHUD()
                     {
                         self.gg_rotation--;
                     }
-                   
                 }
             }
             wait 0.2;
@@ -425,7 +497,8 @@ handlePlayerHUD()
     }
     else
     {
-        requirement_next_gun.label = &"Kills: ";
+        gg_hud["score_left_label"] scripts\zm\overflowFix::setSafeText("Kills Left:");
+        //requirement_next_gun.label = &"Kills: ";
         while (self.gg_rotation > 0 && level.gg_rotation > 0)
         {
             level waittill("zom_kill");
@@ -438,16 +511,18 @@ handlePlayerHUD()
                 {
                     self.gg_requirement_target = 0;
                 }
-                requirement_next_gun setValue(int(self.gg_requirement_target));
-
+                //requirement_next_gun setValue(int(self.gg_requirement_target));
+                gg_hud["score_left_value"] setValue(int(self.gg_requirement_target));
                 if (self.gg_requirement_target == 0)
                 {
                     if (self.gg_index < level.gg_weapons.size - 1)
                     {
                         self.gg_index = self.gg_index + 1;
                         self.gg_requirement_target = int(level.gg_weapons[self.gg_index].requirement);
-                        requirement_next_gun setValue(int(self.gg_requirement_target));
-                        next_gun scripts\zm\overflowFix::setSafeText(self,"Next: " + getWeaponNameByID(level.gg_weapons[self.gg_index+1].weapon_id));
+                        //requirement_next_gun setValue(int(self.gg_requirement_target));
+                        //next_gun scripts\zm\overflowFix::setSafeText(self, "Next: " + getWeaponNameByID(level.gg_weapons[self.gg_index + 1].weapon_id));
+                        gg_hud["score_left_value"] setValue(int(self.gg_requirement_target));
+                        gg_hud["next_gun_value"] scripts\zm\overflowFix::setSafeText(self, "^2" + getWeaponNameByID(level.gg_weapons[self.gg_index+1].weapon_id));
                         self takeallweapons();
                         self giveweapon(level.gg_weapons[self.gg_index].weapon_id);
                         self SwitchToWeaponImmediate(level.gg_weapons[self.gg_index].weapon_id);
@@ -461,7 +536,8 @@ handlePlayerHUD()
         }
     }
     level notify("end_game");
-    foreach(player in level.players)
+
+    foreach (player in level.players)
     {
         player EnableInvulnerability();
     }
