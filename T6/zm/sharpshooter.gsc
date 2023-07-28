@@ -412,7 +412,7 @@ handleWeaponRotation()
     foreach (player in level.players)
     {
         player EnableInvulnerability();
-        player FreezeControls(1)
+        player FreezeControls(1);
     }
     
 }
