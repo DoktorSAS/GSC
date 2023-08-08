@@ -37,11 +37,11 @@ restoreLocker()
             - alt_stock probably is for special weapons (tbh idk)
     */
     self set_map_weaponlocker_stat("name", "weapon_mp", level.script);
-    self set_map_weaponlocker_stat("lh_clip", 0, level.script);
-    self set_map_weaponlocker_stat("clip", 0, level.script);
-    self set_map_weaponlocker_stat("stock", 0, level.script);
-    self set_map_weaponlocker_stat("alt_clip", 0, level.script);
-    self set_map_weaponlocker_stat("alt_stock", 0, level.script);
+    self set_map_weaponlocker_stat("lh_clip", 999, level.script);
+    self set_map_weaponlocker_stat("clip", 999, level.script);
+    self set_map_weaponlocker_stat("stock", 999, level.script);
+    self set_map_weaponlocker_stat("alt_clip", 999, level.script);
+    self set_map_weaponlocker_stat("alt_stock", 999, level.script);
 }
 
 maxoutBank()
