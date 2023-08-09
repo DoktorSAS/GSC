@@ -46,5 +46,5 @@ restoreLocker()
 
 maxoutBank()
 {
-    self.account_value = level.bank_deposit_max_amount
+    self.account_value = level.bank_deposit_max_amount;
 }
