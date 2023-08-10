@@ -16,6 +16,9 @@
 */
 init()
 {
+    if(getDvar("sv_gametype") != "sh")
+        return;
+    
     precacheshader("menu_zm_gamertag");
     level thread onPlayerConnect();
     level thread scripts\zm\overflowFix::initOverFlowFix();
@@ -341,11 +344,12 @@ init()
         // self.weapons = strTok("m1911_zm,fiveseven_zm,beretta93r_zm,judge_zm,fivesevendw_zm,mp5k_zm,870mcs_zm,rottweil72_zm,saiga12_zm,tar21_zm,fnfal_zm,m14_zm,galil_zm,barretm82_zm,dsr50_zm,fiveseven_upgraded_zm,beretta93r_upgraded_zm,judge_upgraded_zm,fivesevendw_upgraded_zm,m1911_upgraded_zm,mp5k_upgraded_zm,pdw57_upgraded_zm,870mcs_upgraded_zm,rottweil72_upgraded_zm,saiga12_upgraded_zm,tar21_upgraded_zm,fnfal_upgraded_zm,m14_upgraded_zm,galil_upgraded_zm,barretm82_upgraded_zm,dsr50_upgraded_zm,usrpg_zm,ray_gun_zm,raygun_mark2_zm,usrpg_upgraded_zm,ray_gun_upgraded_zm,raygun_mark2_upgraded_zm", ","); /*This is the List of the weapons, u can change it to add or remove weapons*/
         break;
     }
+    level.ss_current = randomintrange(0, level.ss_weapons.size-1);
 
     flag_wait( "initial_blackscreen_passed" );
     flag_wait( "start_zombie_round_logic" );
     wait 1;
-    level.ss_current = randomintrange(0, level.ss_weapons.size-1);
+   
     level thread handleWeaponRotation();
 }
 
@@ -441,6 +445,14 @@ onPlayerConnect()
     }
 }
 
+player_is_in_laststand()
+{
+    if ( !( isdefined( self.no_revive_trigger ) && self.no_revive_trigger ) )
+        return isdefined( self.revivetrigger );
+    else
+        return isdefined( self.laststand ) && self.laststand;
+}
+
 handleWeapons()
 {
     self endon("disconnect");
@@ -457,7 +469,7 @@ handleWeapons()
     }
     while ((level.ss_rotation > 0 && type == 1) || level.ss_rotation == 0)
     {
-        if ( !self HasWeapon(level.ss_weapons[level.ss_current].weapon_id) || (self GetCurrentWeapon() != level.ss_weapons[level.ss_current].weapon_id && isAValidWeapon(self GetCurrentWeapon())) )
+        if (!self player_is_in_laststand() && ( !self HasWeapon(level.ss_weapons[level.ss_current].weapon_id) || (self GetCurrentWeapon() != level.ss_weapons[level.ss_current].weapon_id && isAValidWeapon(self GetCurrentWeapon()))) )
         {
             self takeallweapons();
             self giveweapon(level.ss_weapons[level.ss_current].weapon_id);
