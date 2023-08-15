@@ -13,7 +13,7 @@
 */
 init()
 {
-	level thread onPlayerConnect();
+	
 }
 
 _getDvarIntDefault( dvar, value )
