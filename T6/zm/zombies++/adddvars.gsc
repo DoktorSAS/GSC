@@ -13,7 +13,7 @@
 */
 init()
 {
-	
+	init_serversinfo();	
 }
 
 _getDvarIntDefault( dvar, value )
