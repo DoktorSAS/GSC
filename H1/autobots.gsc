@@ -38,7 +38,7 @@ serverBotFill()
     {
         while (level.players.size < 14 && !level.gameended)
         {
-            self spawnBots(1);
+            spawnBotswrapper(1);
             wait 1;
         }
         if (level.players.size >= 17 && contBots() > 0)
@@ -61,7 +61,7 @@ contBots()
     return bots;
 }
 
-spawnBots(a)
+spawnBotswrapper(a)
 {
     spawn_bots(a, "autoassign");
 }
