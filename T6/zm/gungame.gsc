@@ -336,6 +336,17 @@ init()
     }
 }
 
+main()
+{
+    replacefunc(maps\mp\zombies\_zm_magicbox::treasure_chest_init, ::empty_treasure_chest_init);
+	replacefunc(maps\mp\zombies\_zm_weapons::weapon_spawn_think, ::empty_weapon_spawn_think);
+}
+
+empty_treasure_chest_init( start_chest_name ){}
+
+empty_weapon_spawn_think(){}
+
+
 onPlayerConnect()
 {
     for (;;)
