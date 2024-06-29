@@ -18,7 +18,6 @@ init()
 {
     precacheshader("menu_zm_gamertag");
     level thread onPlayerConnect();
-    level thread scripts\zm\overflowFix::initOverFlowFix();
 
     level.gg_rotation = 1; // Set to 0 for infinite rotation
     level.gg_scorebased = 1;
