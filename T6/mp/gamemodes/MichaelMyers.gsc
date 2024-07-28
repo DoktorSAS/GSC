@@ -21,6 +21,7 @@ init()
     level.onstartgametype = ::onstartgametype;
     level.onspawnplayer = ::onspawnplayer;
     level.onspawnplayerunified = ::onspawnplayerunified;
+	level.onplayerdamage = ::onplayerdamage;
     level.onplayerkilled = ::onplayerkilled;
     level.givecustomloadout = ::givecustomloadout;
 	level.maxkillstreaks = 0; // disable players killstreaks
@@ -41,19 +42,56 @@ MichaelMyersStart()
 	level waittill("mm_start");
 	wait 5;
 	// hud info box
-	infos = SpawnStruct();
-	infos.background = level DrawShader("black", 0, 400, 200, 32, (1, 1, 1), 0.7, 3, "LEFT", "CENTER", 1);
-	infos.textline = level CreateString("", "objective", 1.2, "CENTER", "CENTER", 0, 212, (1, 1, 1), 1, (0, 0, 0), 0.5, 5);
-	infos.textline.label = &"Choosing mayer in ^3";
+	level.mm_infos = SpawnStruct();
+	ChooseMichaelMayers();
+
+	
+	
+}
+
+ChooseMichaelMayers()
+{
+	level.mm_infos.background = level DrawShader("black", 0, 400, 200, 32, (1, 1, 1), 0.7, 3, "LEFT", "CENTER", 1);
+	level.mm_infos.textline = level CreateString("", "objective", 1.2, "CENTER", "CENTER", 0, 212, (1, 1, 1), 1, (0, 0, 0), 0.5, 5);
+	level.mm_infos.textline.label = &"Choosing Michael Mayers in ^3";
 	for(i = 5; i >= 0; i--)
 	{
-		infos.textline setValue(i);
+		level.mm_infos.textline setValue(i);
 		wait 0.98;
 	}
-
-	level.mm_attacker = level.players[randomintrange(0, level.players.size)];
+	level.mm_attacker = level.players[0];
 	level.mm_attacker respawnPlayer( game["attackers"] );
+	level.mm_infos.textline destroy();
+	level.mm_infos.textline = level CreateString("^1" + level.mm_attacker.name, "objective", 1.2, "CENTER", "CENTER", 0, 212, (1, 1, 1), 1, (0, 0, 0), 0.5, 5);
+
+	level.mm_attacker HandleMichaelMyersSafeLocation();
 }
+
+HandleMichaelMyersSafeLocation()
+{
+	level endon("game_ended");
+	self endon("disconnect");
+	self.safelocation = self.origin;
+	self.pers["safelocation"] = self.origin;
+	for(;;)
+	{
+		wait 2.5;
+		if(self IsOnGround())
+		{
+			self.safelocation = self.origin;
+			self.pers["safelocation"] = self.origin;
+		}
+	}
+}
+
+onMichaelMyersDisconnect()
+{
+	level endon("game_ended");
+	self waittill("disconnect");
+}
+
+
+
 
 main()
 {
@@ -111,13 +149,24 @@ givecustomloadout( takeallweapons, alreadyspawned )
     self giveweapon( currentweapon );
     self switchtoweapon( currentweapon );
 	self setweaponammostock( "fiveseven_mp", 0 );
-	self setweaponammoclip( "fiveseven_mp", 3 );
+	self setweaponammoclip( "fiveseven_mp", 0 );
     self giveweapon( "knife_mp" );
 
     if ( !isdefined( alreadyspawned ) || !alreadyspawned )
         self setspawnweapon( currentweapon );
 
     return currentweapon;
+}
+
+onplayerdamage( einflictor, eattacker, idamage, idflags, smeansofdeath, sweapon, vpoint, vdir, shitloc, psoffsettime )
+{
+    if (sMeansOfDeath == "MOD_TRIGGER_HURT" || sMeansOfDeath == "MOD_SUICIDE" || sMeansOfDeath == "MOD_FALLING")
+	{
+		self setOrigin(self.safelocation);
+		return 0;
+	}
+
+    return idamage;
 }
 
 onplayerkilled( einflictor, attacker, idamage, smeansofdeath, sweapon, vdir, shitloc, psoffsettime, deathanimduration )
