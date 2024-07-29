@@ -23,12 +23,13 @@ init()
     level.onspawnplayerunified = ::onspawnplayerunified;
 	level.onplayerdamage = ::onplayerdamage;
     level.onplayerkilled = ::onplayerkilled;
+	level.ontimelimit = ::ontimelimit;
     level.givecustomloadout = ::givecustomloadout;
 	level.maxkillstreaks = 0; // disable players killstreaks
 
 	registernumlives( 1, 100 );
 	// gametype variables
-	level.default_mmweapon = "fiveseven_mp";
+	level.default_mmweapon = "knife_held_mp";
 	level.mm_attacker = undefined;
 	level.minplayerstoplay = 4;
 
@@ -44,9 +45,8 @@ MichaelMyersStart()
 	// hud info box
 	level.mm_infos = SpawnStruct();
 	ChooseMichaelMayers();
-
-	
-	
+	level.mm_infos.background destroy();
+	level.mm_infos.textline destroy();
 }
 
 ChooseMichaelMayers()
@@ -59,12 +59,14 @@ ChooseMichaelMayers()
 		level.mm_infos.textline setValue(i);
 		wait 0.98;
 	}
-	level.mm_attacker = level.players[0];
+	//level.mm_attacker = level.players[0];
+	level.mm_attacker = level.players[RandomIntRange(0, level.players.size)];
 	level.mm_attacker respawnPlayer( game["attackers"] );
 	level.mm_infos.textline destroy();
 	level.mm_infos.textline = level CreateString("^1" + level.mm_attacker.name, "objective", 1.2, "CENTER", "CENTER", 0, 212, (1, 1, 1), 1, (0, 0, 0), 0.5, 5);
 
-	level.mm_attacker HandleMichaelMyersSafeLocation();
+	level.mm_attacker thread HandleMichaelMyersSafeLocation();
+	level.mm_attacker thread onMichaelMyersDisconnect();
 }
 
 HandleMichaelMyersSafeLocation()
@@ -88,10 +90,8 @@ onMichaelMyersDisconnect()
 {
 	level endon("game_ended");
 	self waittill("disconnect");
+	ChooseMichaelMayers();
 }
-
-
-
 
 main()
 {
@@ -133,7 +133,7 @@ onPlayerSpawned()
 		{
 			respawnPlayer(game["defenders"]);
 		}
-    }
+	}
 }
 
 givecustomloadout( takeallweapons, alreadyspawned )
@@ -148,14 +148,25 @@ givecustomloadout( takeallweapons, alreadyspawned )
     self disableweaponcycling(); // disable the use of killstreaks if givven
     self giveweapon( currentweapon );
     self switchtoweapon( currentweapon );
-	self setweaponammostock( "fiveseven_mp", 0 );
-	self setweaponammoclip( "fiveseven_mp", 0 );
     self giveweapon( "knife_mp" );
 
     if ( !isdefined( alreadyspawned ) || !alreadyspawned )
         self setspawnweapon( currentweapon );
 
     return currentweapon;
+}
+
+ontimelimit()
+{
+    if ( level.teambased )
+	{
+		maps\mp\gametypes\_globallogic_score::giveteamscoreforobjective_delaypostprocessing( game["defenders"], 1 );
+    	thread maps\mp\gametypes\_globallogic::endgame( game["defenders"], "Survivors has won the game" );
+	}
+    else
+	{
+		thread maps\mp\gametypes\_globallogic::endgame( game["defenders"], "Survivors has won the game" );
+	}
 }
 
 onplayerdamage( einflictor, eattacker, idamage, idflags, smeansofdeath, sweapon, vpoint, vdir, shitloc, psoffsettime )
@@ -166,8 +177,14 @@ onplayerdamage( einflictor, eattacker, idamage, idflags, smeansofdeath, sweapon,
 		return 0;
 	}
 
+	if(self == level.mm_attacker && level.mm_attacker != eattacker)
+	{
+		return 0;
+	}
+
     return idamage;
 }
+
 
 onplayerkilled( einflictor, attacker, idamage, smeansofdeath, sweapon, vdir, shitloc, psoffsettime, deathanimduration )
 {
@@ -187,6 +204,7 @@ onplayerkilled( einflictor, attacker, idamage, smeansofdeath, sweapon, vdir, shi
 
         if ( smeansofdeath == "MOD_MELEE" )
         {
+			attacker maps\mp\gametypes\_globallogic_score::giveteamscoreforobjective( attacker.team, 1 );
             maps\mp\_scoreevents::processscoreevent( "humiliation_gun", attacker, self, sweapon );
             attacker playlocalsound( game["dialog"]["wm_humiliation"] );
         }
