@@ -5,6 +5,10 @@
 /*
 	Mod: Michael Myers
 	Developed by DoktorSAS
+
+	# requirements:
+	it is required to have downloaded _csupplydrop.gsc and its needed to be
+	placed in scripts\mp.
 */
 
 init()
@@ -47,6 +51,72 @@ MichaelMyersStart()
 	ChooseMichaelMayers();
 	level.mm_infos.background destroy();
 	level.mm_infos.textline destroy();
+	thread HandleAirdropLocations();
+}
+
+
+onsupplydropcaptured()
+{
+	//IPrintLn("onsupplydropcaptured");
+	//IPrintLn(self.name);
+	if((isDefined(level.mm_attacker) && self != level.mm_attacker) || !isDefined(level.mm_attacker))
+	{
+		stuns = [];
+		stuns[0] = "proximity_grenade_mp";
+		stuns[1] = "smoke_grenade_mp";
+		stuns[2] = "flash_grenade_mp";
+		
+		stun = stuns[RandomIntRange(0, stuns.size)];
+		//IPrintLn(self GetCurrentOffHand());
+		//IPrintLn(self getweaponammoclip( self GetCurrentOffHand() ));
+		if(!self HasWeapon(stun) || self getweaponammoclip( self GetCurrentOffHand() ) == 0)
+		{
+			self TakeWeapon(self GetCurrentOffHand());
+			self giveweapon( stun );
+			self setweaponammoclip( stun, 2 );
+			self switchtooffhand( stun );
+			self.grenadetypesecondary = stun;
+			self.grenadetypesecondarycount = 2;
+
+			if ( self.grenadetypesecondarycount > 1 )
+				self dualgrenadesactive();
+		}
+		else
+		{
+			self giveweapon( stun );
+			self setweaponammoclip( stun, 2 );
+			self switchtooffhand( stun );
+			self.grenadetypesecondary = stun;
+			self.grenadetypesecondarycount = 2;
+
+			if ( self.grenadetypesecondarycount > 1 )
+				self dualgrenadesactive();
+		}
+		
+		self setmovespeedscale( self getmovespeedscale() + 0.25  );
+	}
+	else 
+	{
+		if(level.mm_attacker.speedscale < 5)
+		{
+			level.mm_attacker.speedscale = level.mm_attacker.speedscale + 0.5;
+			self setmovespeedscale( level.mm_attacker.speedscale  );
+		}
+		
+    	//self setsprintduration( 4 );
+    	//self setsprintcooldown( 0 );
+	}
+}
+
+HandleAirdropLocations()
+{
+	level endon("game_ended");
+	for(;;)
+	{
+		wait RandomIntRange(40, 60);
+		scripts\mp\_csupplydrop::player_based_drop_location( 1 );
+		thread summon_supply_airdrop(level.airdrop_locations[RandomIntRange(0, level.airdrop_locations.size)], ::onsupplydropcaptured);
+	}
 }
 
 ChooseMichaelMayers()
@@ -64,6 +134,7 @@ ChooseMichaelMayers()
 	level.mm_attacker respawnPlayer( game["attackers"] );
 	level.mm_infos.textline destroy();
 	level.mm_infos.textline = level CreateString("^1" + level.mm_attacker.name, "objective", 1.2, "CENTER", "CENTER", 0, 212, (1, 1, 1), 1, (0, 0, 0), 0.5, 5);
+	level.mm_attacker.speedscale = 1;
 
 	level.mm_attacker thread HandleMichaelMyersSafeLocation();
 	level.mm_attacker thread onMichaelMyersDisconnect();
