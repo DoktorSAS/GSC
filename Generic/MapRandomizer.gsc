@@ -47,6 +47,11 @@ init()
             else
                 setDvar("sv_maprotation", "map " + maps[ randomintrange(0, maps.size-1) ] );
         break;
+        case "H1":
+            _setDvarIfNotUnizialized("sv_gm_gametype", "war");
+            gametype = getDvar("sv_gm_gametype");
+            setDvar("sv_maprotationcurrent", "gametype " + gametype + " map " + maps[ randomintrange(0, maps.size-1) ] );
+        break;
     }
 }
 
