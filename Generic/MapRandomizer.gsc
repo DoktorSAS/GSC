@@ -3,7 +3,7 @@
 
 /*
     Mod: Map Randomizer
-    Clients Supported: T4, T5, T6, IW3, IW5, IW5
+    Clients Supported: T4, T5, T6, IW3, IW5, IW5, H1
     Deveoped by @DoktorSAS
 */
 
@@ -74,6 +74,9 @@ getDefaultMaps( client )
         case "T6":
             maps = "mp_la mp_dockside mp_carrier mp_drone mp_express mp_hijacked mp_meltdown mp_overflow mp_nightclub mp_raid mp_slums mp_village mp_turbine mp_socotra mp_nuketown_2020";
         break;
+        case "H1":
+            maps = "mp_convoy mp_backlot mp_bog mp_crash mp_crossfire mp_citystreets mp_farm mp_overgrown mp_shipment mp_vacant mp_broadcast mp_carentan mp_countdown mp_bloc mp_creek mp_killhouse mp_pipeline mp_strike mp_showdown mp_cargoship mp_crash_snow mp_farm_spring mp_bog_summer";
+        break;
     }
     return maps;
 }
@@ -102,6 +105,9 @@ getClient()
         case "Call of Duty Multiplayer - Ship COD_T6_S MP build 1.0.44 CL(1759941) CODPCAB2 CEG Fri May 9 19:19:19 2014 win-x86 813e66d5":
             result = "T6";
         break;
+        case "H1 MP 1.15 build 1251288 Tue Jul 23 13:38:30 2019 win64":
+            result = "H1";
+        break;
       
       
     }
@@ -118,6 +124,8 @@ getClient()
         result = "T5"; 
     else if( isSubStr(version, "T6")) 
         result = "T6"; 
+    else if( isSubStr(version, "H1")) 
+        result = "H1"; 
 
     return result;
        
