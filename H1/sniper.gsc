@@ -8,7 +8,6 @@ init()
 
 codecallback_playerdamage(eInflictor, eAttacker, iDamage, iDFlags, sMeansOfDeath, sWeapon, vPoint, vDir, sHitLoc, psOffsetTime)
 {
-    level.players[0] IPrintLn(weaponclass( sWeapon ));
     _iDamage = iDamage;
     if (sMeansOfDeath == "MOD_MELEE")
     {
