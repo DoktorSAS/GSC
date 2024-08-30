@@ -20,11 +20,6 @@ codecallback_playerdamage(eInflictor, eAttacker, iDamage, iDFlags, sMeansOfDeath
     {
         _iDamage = 999;
     } 
-    else if (!sMeansOfDeath == "MOD_TRIGGER_HURT" && !sMeansOfDeath == "MOD_SUICIDE" && !sMeansOfDeath == "MOD_FALLING")
-    {
-        //_iDamage = 0;
-        return;
-    }
 
    [[level.callbackplayerdamage_stub]] (eInflictor, eAttacker, _iDamage, iDFlags, sMeansOfDeath, sWeapon, vPoint, vDir, sHitLoc, psOffsetTime);
 }
