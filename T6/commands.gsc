@@ -1,7 +1,7 @@
 init()
 {
     addCommand(0, "guid", ::printGuid);
-    addCommand(0, "test", ::printTest);
+    addCommand(0, "test", ::printTest, "Hello, World!");
     level thread commandListner();
 }
 

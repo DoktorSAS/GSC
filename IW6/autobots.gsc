@@ -82,7 +82,7 @@ kickBotOnJoin()
     {
         if (player isentityabot()) 
         {
-	    player bot_drop();
+	        player bot_drop();
             break;
         }
     }

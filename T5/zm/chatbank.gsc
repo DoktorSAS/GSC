@@ -5,8 +5,9 @@
     Mod: Black ops I and Black ops II chat bank
     Developed by @DoktorSAS
 
-    TODO:
-        Testing the code once say notify get relased
+    IMPORTANT:
+    The code do not work it is a base code for the chatbank ported from T6 to T5.
+    Don't consider this code as working.
 
     Requirements:
         t5-gsc-utils.dll for Black ops I

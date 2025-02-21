@@ -13,7 +13,7 @@
  */
 spawnSupplyDrop()
 {
-    thread summon_supply_airdrop(self.origin, ::testonuse);
+    thread summon_supply_airdrop(self.origin, :: testonuse);
 }
 
 /**
@@ -21,24 +21,21 @@ spawnSupplyDrop()
  * @param {vector} store_location - If defined it will allow to store all the generate locations.
  * @return {vector} airdrop_location - The obtain location origin.
  */
-player_based_drop_location( store_location )
+player_based_drop_location(store_location)
 {
-    if(!isDefined(level.airdrop_locations) && isDefined(store_location))
-    {
+    if (!isDefined(level.airdrop_locations) && isDefined(store_location)) {
         level.airdrop_locations = [];
     }
     airdrop_location = undefined;
-    while(!isDefined(airdrop_location))
-    {
+    while (!isDefined(airdrop_location)) {
         player = level.players[RandomIntRange(0, level.players.size)];
-        if(IsAlive(player) && player IsOnGround())
+        if (IsAlive(player) && player IsOnGround())
         {
             airdrop_location = player.origin;
         }
     }
 
-    if(isDefined(store_location))
-    {
+    if (isDefined(store_location)) {
         level.airdrop_locations[level.airdrop_locations.size] = airdrop_location;
     }
     return airdrop_location;
@@ -53,51 +50,50 @@ player_based_drop_location( store_location )
  */
 summon_supply_airdrop(drop_location_origin, oncaptured, team)
 {
-	if(!isDefined(team))
-	{
-		team = "any";
-	}
-	crate = SpawnStruct();
-	helicoptertarget = drop_location_origin + (0, 0, 1500);
+    if (!isDefined(team)) {
+        team = "any";
+    }
+    crate = SpawnStruct();
+    helicoptertarget = drop_location_origin + (0, 0, 1500);
     helicopterspawn = level.mapcenter + (10000, 10000, helicoptertarget[2]);
     helicopterleave = level.mapcenter + (-10000, -10000, helicoptertarget[2]);
 
     crate.supplydrop = spawn_entity("script_model", "t6_wpn_drop_box", helicopterspawn + (0, 0, -70), VectorToAngles(helicoptertarget - helicopterspawn));
-	chopper = spawn_helicopter(self, helicopterspawn, team, VectorToAngles(helicoptertarget - helicopterspawn), "heli_supplydrop_mp", "veh_t6_drone_supply", crate.supplydrop);
+    chopper = spawn_helicopter(self, helicopterspawn, team, VectorToAngles(helicoptertarget - helicopterspawn), "heli_supplydrop_mp", "veh_t6_drone_supply", crate.supplydrop);
 	chopper SetVehGoalPos(helicoptertarget, 0);
 
-	while (Distance(chopper.origin, helicoptertarget) > 7500)
+    while (Distance(chopper.origin, helicoptertarget) > 7500)
         wait 0.05;
 
-	supplydropspeed = getdvarintdefault("scr_supplydropSpeedStarting", 125);
+    supplydropspeed = getdvarintdefault("scr_supplydropSpeedStarting", 125);
     supplydropaccel = getdvarintdefault("scr_supplydropAccelStarting", 100);
     chopper setspeed(int(supplydropspeed / 8), int(supplydropaccel / 4));
     chopper waittill("goal");
 	wait 2;
     crate.supplydrop Unlink();
-	crate.collision = SpawnCollision("collision_clip_32x32x32", "collider", crate.supplydrop.origin, crate.supplydrop.angles);
+    crate.collision = SpawnCollision("collision_clip_32x32x32", "collider", crate.supplydrop.origin, crate.supplydrop.angles);
     crate.supplydrop thread physics_await_stationary(crate.collision);
-	supplydropspeed = getdvarintdefault("scr_supplydropSpeedStarting", 125);
+    supplydropspeed = getdvarintdefault("scr_supplydropSpeedStarting", 125);
     supplydropaccel = getdvarintdefault("scr_supplydropAccelStarting", 100);
     chopper setspeed(supplydropspeed, supplydropaccel);
 	chopper SetVehGoalPos(helicopterleave, 0);
     wait 5;
 	chopper waittill("goal");
-    chopper delete();
+    chopper delete ();
 
-	crate.supplydrop.visibletoall = 1;
-	crate.supplydrop setteam("any");
-	crate.supplydrop.curprogress = 0;
+    crate.supplydrop.visibletoall = 1;
+    crate.supplydrop setteam("any");
+    crate.supplydrop.curprogress = 0;
     crate.supplydrop.inuse = 0;
     crate.supplydrop.userate = 1;
     crate.supplydrop.usetime = 3;
-	crate.supplydrop.oncaptured = oncaptured;
+    crate.supplydrop.oncaptured = oncaptured;
     crate.supplydrop.owner = crate.supplydrop;
 
-	crate.supplydrop thread maps\mp\killstreaks\_supplydrop::crateactivate(undefined);
-	crate.supplydrop thread crateusethink();
+    crate.supplydrop thread maps\mp\killstreaks\_supplydrop:: crateactivate(undefined);
+    crate.supplydrop thread crateusethink();
 	crate thread crate_destroy();
-	return crate;
+    return crate;
 }
 
 /**
@@ -107,9 +103,9 @@ crate_destroy()
 {
 	self endon("death");
     self.supplydrop waittill_any("death", "captured");
-	self.supplydrop thread maps\mp\killstreaks\_supplydrop::cratedeactivate();
-    self.supplydrop delete();
-	self.collision delete();
+    self.supplydrop thread maps\mp\killstreaks\_supplydrop:: cratedeactivate();
+    self.supplydrop delete ();
+    self.collision delete ();
 }
 
 /**
@@ -125,42 +121,37 @@ testonuse()
  */
 crateusethink()
 {
-    while (isdefined(self))
-    {
+    while (isdefined(self)) {
         self waittill("trigger", player);
 
         if (!isalive(player))
             continue;
 
         if (!player isonground())
-            continue;
+        continue;
 
         useent = self spawnuseent();
         result = 0;
 
         self.useent = useent;
-		usetime = self.usetime;
-		if(level.teambased) 
-		{
-			if(isDefined(self.usetime_axis) && player.team == "axis")
-			{
-				usetime = self.usetime_axis;
-			}
-			else if(isDefined(self.usetime_allies) && player.team == "axis")
-			{
-				usetime = self.usetime_allies;
-			}
-		}
+        usetime = self.usetime;
+        if (level.teambased) {
+            if (isDefined(self.usetime_axis) && player.team == "axis") {
+                usetime = self.usetime_axis;
+            }
+            else if (isDefined(self.usetime_allies) && player.team == "axis") {
+                usetime = self.usetime_allies;
+            }
+        }
         result = useent useholdthink(player, float(self.usetime * 1000));
 
         if (isdefined(useent))
-            useent delete();
+            useent delete ();
 
-        if (result)
-        {
+        if (result) {
             self notify("captured", player, 0);
-			player [[self.oncaptured]]();
-			self.useent delete();
+            player[[self.oncaptured]]();
+            self.useent delete ();
         }
     }
 }
@@ -171,11 +162,10 @@ crateusethink()
  */
 physics_await_stationary(collision)
 {
-	if(isDefined(collision))
-	{
+    if (isDefined(collision)) {
 		collision LinkTo(self);
-	}
-	forcepoint = self.origin;
+    }
+    forcepoint = self.origin;
     initialvelocity = (0, 0, 0);
     self physicslaunch(forcepoint, initialvelocity);
     self waittill("stationary");
@@ -192,14 +182,14 @@ physics_await_stationary(collision)
 spawn_entity(class, model, origin, angles)
 {
     entity = Spawn(class, origin);
-    
+
     if (IsDefined(angles))
         entity.angles = angles;
     if (IsDefined(model))
         entity SetModel(model);
-        
+
     entity.custom = true;
-    
+
     return entity;
 }
 
@@ -214,19 +204,18 @@ spawn_entity(class, model, origin, angles)
  * @param {entity} entity - The entity associated with the helicopter.
  * @return {entity} chopper - The spawned helicopter.
  */
-spawn_helicopter(owner, origin, team, angles, model, targetname, entity) 
+spawn_helicopter(owner, origin, team, angles, model, targetname, entity)
 {
-	chopper = spawnhelicopter(owner, origin, angles, model, targetname);
-	if(isDefined(entity))
-	{
+    chopper = spawnhelicopter(owner, origin, angles, model, targetname);
+    if (isDefined(entity)) {
 		entity linkto(chopper);
-	}
+    }
     chopper.owner = owner;
     chopper.maxhealth = 1500;
     chopper.health = 999999;
     chopper.rocketdamageoneshot = chopper.maxhealth + 1;
     chopper.damagetaken = 0;
-    chopper thread maps\mp\killstreaks\_helicopter::heli_damage_monitor("supply_drop_mp");
+    chopper thread maps\mp\killstreaks\_helicopter:: heli_damage_monitor("supply_drop_mp");
     chopper.spawntime = gettime();
     supplydropspeed = getdvarintdefault("scr_supplydropSpeedStarting", 125);
     supplydropaccel = getdvarintdefault("scr_supplydropAccelStarting", 100);
@@ -238,6 +227,6 @@ spawn_helicopter(owner, origin, team, angles, model, targetname, entity)
     chopper setdrawinfrared(1);
     target_set(chopper, vectorscale((0, 0, -1), 25.0));
 
-    chopper thread maps\mp\killstreaks\_supplydrop::helidestroyed();
+    chopper thread maps\mp\killstreaks\_supplydrop:: helidestroyed();
     return chopper;
 }
