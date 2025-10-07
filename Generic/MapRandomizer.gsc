@@ -62,7 +62,7 @@ getDefaultMaps( client )
     switch( client )
     {
         case "IW3":
-            maps = "mp_backlot mp_block mp_broadcast gametype sd mp_shipment mp_countdown gametype dom mp_backlot mp_shipment";   
+            maps = "mp_backlot mp_block mp_broadcast mp_shipment mp_countdown mp_backlot mp_shipment";   
         break;
         case "IW4":
             maps = "mp_afghan mp_boneyard mp_brecourt mp_checkpoint mp_derail mp_estate mp_favela mp_highrise mp_invasion mp_nightshift mp_quarry mp_rundown mp_rust mp_subbase mp_terminal mp_underpass mp_compact mp_complex mp_crash mp_overgrown mp_storm mp_strike mp_vacant mp_fuel2 mp_abandon mp_trailerpark";   
