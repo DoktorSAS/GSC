@@ -7,11 +7,11 @@ init()
 
 printGuid()
 {
-    self tell("Guid:" + self.guid);
+    self IPrintLnBold("Guid:" + self.guid);
 }
 printTest( message )
 {
-    self tell( message );
+    self IPrintLnBold( message );
 }
 
 addCommand( role, command, invoke, args)
@@ -37,14 +37,14 @@ commandListner()
     for(;;)
     {
         level waittill("say", message, player);
+        if(!isDefined(player.role))
+            player.role = 0;
+
+        command = message;
         if(isDefined(level.commands[command]) 
             && isDefined(player.role) && player.role >= level.commands[command].role) 
         {
             player [[level.commands[command].invoke]]( level.commands[command].args );
         }
-        else
-        {
-            player tell("Unknown command");
-        }      
     }
 }
