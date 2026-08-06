@@ -30,7 +30,7 @@ NotificationBannerPadding(text, fontscale)
     return padding;
 }
 
-CreateNotificationBanner(id, shader, x, height, height, font, fontscale)
+CreateNotificationBanner(id, shader, x, y, height, font, fontscale)
 {
     banner = spawnstruct();
 
