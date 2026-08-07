@@ -51,7 +51,7 @@ CreateNotificationBanner(id, shader, x, y, height, font, fontscale)
 
 exemple_of_usage()
 {
-    banner = CreateNotificationBanner("test_ads", "menu_background_fade", -16, 25, "objective", 1.4);
+    banner = CreateNotificationBanner("test_ads", "menu_background_fade", 0, -16, 25, "objective", 1.4);
     
     textAnimationTime = 10;
     banner [[banner.notificate]]("Consider supporting with a donation at ^8patreon.com/^3DoktorSAS", textAnimationTime);
