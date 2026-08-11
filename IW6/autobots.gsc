@@ -20,11 +20,8 @@ init()
         setdvarifuninitialized("min_bots", 2);
         setdvarifuninitialized("max_bots", 2);
     }
-    
-    // maps\mp\_utility::waslastround() || !maps\mp\_utility::isroundbased() && maps\mp\_utility::hittimelimit()
 
-
-    if(level.teambased && game["roundsPlayed"] == 0)
+    if(level.teambased && game["roundsPlayed"] == 0) // This is to prevent the execution of the init on SD and SR
     {
         level thread botsAutoFill();
     }
